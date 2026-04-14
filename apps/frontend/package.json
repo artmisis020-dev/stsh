@@ -2,6 +2,7 @@
   "name": "@starshield/frontend",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
@@ -15,10 +16,10 @@
     "axios": "^1.7.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.53.0"
+    "react-hook-form": "^7.53.0",
+    "react-router-dom": "^7.9.3"
   },
   "devDependencies": {
-    "@starshield/config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.4",
     "@types/node": "^22.7.5",
     "@types/react": "^19.0.0",
@@ -29,6 +30,6 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^4.1.4",
     "vite": "^5.4.8",
-    "typescript": "^5.6.3"
+    "typescript": "6.0.2"
   }
 }
