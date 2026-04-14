@@ -1,12 +1,5 @@
 {
   "name": "@starshield/config",
   "private": true,
-  "version": "0.1.0",
-  "exports": {
-    "./tsconfig.base.json": "./tsconfig.base.json",
-    "./tsconfig.next.json": "./tsconfig.next.json",
-    "./tsconfig.react.json": "./tsconfig.react.json",
-    "./tsconfig.nest.json": "./tsconfig.nest.json",
-    "./tsconfig.package.json": "./tsconfig.package.json"
-  }
+  "version": "0.1.0"
 }
