@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  client
+}
+
+enum UserStatus {
+  pending
+  approved
+  rejected
+}
+
+enum IdState {
+  active
+  deactivated_temp
+  deactivated_perm
+}
+
+enum ActionType {
+  activate
+  deactivate_temp
+  deactivate_perm
+}
+
+enum ActionStatus {
+  pending_admin
+  pending_provider
+  completed
+  failed
+}
+
+enum ProviderRequestStatus {
+  pending
+  partial_success
+  completed
+  failed
+}
+
+model User {
+  id             String          @id @default(uuid()) @db.Uuid
+  email          String          @unique
+  passwordHash   String          @map("password_hash")
+  role           UserRole
+  status         UserStatus
+  createdAt      DateTime        @default(now()) @map("created_at")
+  clientRequests ClientRequest[]
+
+  @@map("users")
+}
+
+model ClientRequest {
+  id          String     @id @default(uuid()) @db.Uuid
+  userId      String     @map("user_id") @db.Uuid
+  comment     String
+  createdAt   DateTime   @default(now()) @map("created_at")
+  user        User       @relation(fields: [userId], references: [id])
+  idActions   IdAction[]
+
+  @@map("client_requests")
+}
+
+model IdRecord {
+  id           String     @id @default(uuid()) @db.Uuid
+  value        String     @unique
+  currentState IdState    @map("current_state")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  idActions    IdAction[]
+  auditLogs    AuditLog[]
+
+  @@map("ids")
+}
+
+model ProviderRequest {
+  id         String                @id @default(uuid()) @db.Uuid
+  externalId String                @map("external_id")
+  status     ProviderRequestStatus
+  createdAt  DateTime              @default(now()) @map("created_at")
+  idActions  IdAction[]
+
+  @@map("provider_requests")
+}
+
+model IdAction {
+  id                String          @id @default(uuid()) @db.Uuid
+  idId              String          @map("id_id") @db.Uuid
+  actionType        ActionType      @map("action_type")
+  status            ActionStatus
+  clientRequestId   String          @map("client_request_id") @db.Uuid
+  providerRequestId String?         @map("provider_request_id") @db.Uuid
+  createdAt         DateTime        @default(now()) @map("created_at")
+  idRecord          IdRecord        @relation(fields: [idId], references: [id])
+  clientRequest     ClientRequest   @relation(fields: [clientRequestId], references: [id])
+  providerRequest   ProviderRequest? @relation(fields: [providerRequestId], references: [id])
+
+  @@index([status], map: "idx_id_actions_status")
+  @@index([providerRequestId], map: "idx_id_actions_provider_request_id")
+  @@map("id_actions")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  idId      String   @map("id_id") @db.Uuid
+  prevState IdState  @map("prev_state")
+  newState  IdState  @map("new_state")
+  createdAt DateTime @default(now()) @map("created_at")
+  idRecord  IdRecord @relation(fields: [idId], references: [id])
+
+  @@index([idId], map: "idx_audit_logs_id_id")
+  @@map("audit_logs")
+}

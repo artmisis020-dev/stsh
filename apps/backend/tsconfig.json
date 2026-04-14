@@ -1,7 +1,17 @@
 {
-  "extends": "../../packages/config/tsconfig.nest.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "module": "nodenext",
+    "moduleResolution": "Node",
+    "lib": [
+      "ES2022"
+    ],
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "incremental": true
   },
   "include": [
     "src/**/*.ts"
