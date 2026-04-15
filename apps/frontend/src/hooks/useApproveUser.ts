@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "../constants/queryKeys";
 import { usersService } from "../services/api/users.service";
 
 export function useApproveUser() {
@@ -7,7 +8,10 @@ export function useApproveUser() {
   return useMutation({
     mutationFn: (id: string) => usersService.approveUser(id),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["pending-users"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["pending-users"] }),
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.terminalKitCapacity }),
+      ]);
     },
   });
 }

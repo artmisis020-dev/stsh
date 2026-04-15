@@ -1,28 +1,18 @@
-import { AppShell } from "../components/layout/AppShell";
-import { PendingActionsSection } from "../components/admin/PendingActionsSection";
-import { PendingUsersSection } from "../components/admin/PendingUsersSection";
-import { ProviderRequestsSection } from "../components/admin/ProviderRequestsSection";
-import { useApproveUser } from "../hooks/useApproveUser";
-import { useCreateProviderRequest } from "../hooks/useCreateProviderRequest";
-import { usePendingAdminActions } from "../hooks/usePendingAdminActions";
-import { usePendingUsers } from "../hooks/usePendingUsers";
-import { useProviderRequests } from "../hooks/useProviderRequests";
-import { useRejectUser } from "../hooks/useRejectUser";
-import { useSubmitProviderResults } from "../hooks/useSubmitProviderResults";
-import { useI18n } from "../i18n/I18nProvider";
+import { PendingActionsSection } from "../components/admin/PendingActionsSection.js";
+import { ProviderRequestsSection } from "../components/admin/ProviderRequestsSection.js";
+import { useCreateProviderRequest } from "../hooks/useCreateProviderRequest.js";
+import { usePendingAdminActions } from "../hooks/usePendingAdminActions.js";
+import { useProviderRequests } from "../hooks/useProviderRequests.js";
+import { useSubmitProviderResults } from "../hooks/useSubmitProviderResults.js";
 import type {
   ProviderRequestCreateFormValues,
   ProviderResultFormValues,
-} from "../types/admin";
+} from "../types/admin.js";
 
 export function AdminPage() {
-  const { messages } = useI18n();
-  const pageCopy = messages.admin.page;
-  const pendingUsersQuery = usePendingUsers();
   const pendingActionsQuery = usePendingAdminActions();
   const providerRequestsQuery = useProviderRequests();
-  const approveUserMutation = useApproveUser();
-  const rejectUserMutation = useRejectUser();
+
   const createProviderRequestMutation = useCreateProviderRequest();
   const submitProviderResultsMutation = useSubmitProviderResults();
 
@@ -46,40 +36,19 @@ export function AdminPage() {
   };
 
   return (
-    <AppShell>
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 shadow-2xl shadow-slate-950/40">
-        <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">
-          {pageCopy.eyebrow}
-        </p>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white">
-          {pageCopy.title}
-        </h2>
-        <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300">
-          {pageCopy.description}
-        </p>
-      </div>
+    <div className="grid gap-8">
 
-      <div className="mt-8 grid gap-8">
-        <PendingUsersSection
-          users={pendingUsersQuery.data ?? []}
-          isApproving={approveUserMutation.isPending}
-          isRejecting={rejectUserMutation.isPending}
-          onApprove={(id) => approveUserMutation.mutate(id)}
-          onReject={(id) => rejectUserMutation.mutate(id)}
-        />
+      <PendingActionsSection
+        actions={pendingActionsQuery.data ?? []}
+        isSubmitting={createProviderRequestMutation.isPending}
+        onCreateProviderRequest={handleCreateProviderRequest}
+      />
 
-        <PendingActionsSection
-          actions={pendingActionsQuery.data ?? []}
-          isSubmitting={createProviderRequestMutation.isPending}
-          onCreateProviderRequest={handleCreateProviderRequest}
-        />
-
-        <ProviderRequestsSection
-          providerRequests={providerRequestsQuery.data ?? []}
-          isSubmitting={submitProviderResultsMutation.isPending}
-          onSubmitProviderResult={handleSubmitProviderResult}
-        />
-      </div>
-    </AppShell>
+      <ProviderRequestsSection
+        providerRequests={providerRequestsQuery.data ?? []}
+        isSubmitting={submitProviderResultsMutation.isPending}
+        onSubmitProviderResult={handleSubmitProviderResult}
+      />
+    </div>
   );
 }

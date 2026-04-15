@@ -5,14 +5,14 @@ export function LanguageSwitcher() {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-slate-400">{messages.ui.language}</span>
-      <div className="flex rounded-full border border-slate-700 bg-slate-950/60 p-1">
+      <span className="text-sm text-[var(--text-muted)]">{messages.ui.language}</span>
+      <div className="flex rounded-full border border-[var(--border-main)] bg-black/40 p-1">
         <button
           type="button"
           className={`rounded-full px-3 py-1 text-sm transition ${
             language === "en"
-              ? "bg-cyan-400 text-slate-950"
-              : "text-slate-300 hover:text-white"
+              ? "bg-[var(--accent-gold)] text-black"
+              : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
           }`}
           onClick={() => setLanguage("en")}
         >
@@ -22,8 +22,8 @@ export function LanguageSwitcher() {
           type="button"
           className={`rounded-full px-3 py-1 text-sm transition ${
             language === "uk"
-              ? "bg-cyan-400 text-slate-950"
-              : "text-slate-300 hover:text-white"
+              ? "bg-[var(--accent-gold)] text-black"
+              : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
           }`}
           onClick={() => setLanguage("uk")}
         >

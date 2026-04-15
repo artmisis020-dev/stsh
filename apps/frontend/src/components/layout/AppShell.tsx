@@ -11,14 +11,14 @@ export function AppShell({ children }: AppShellProps) {
   const { messages } = useI18n();
 
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-12 text-slate-50">
+    <main className="min-h-screen bg-[var(--bg-main)] px-6 py-12 text-[var(--text-main)]">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-slate-950/40 lg:flex-row lg:items-center lg:justify-between">
+        <header className="mb-8 flex flex-col gap-5 rounded-[2rem] border border-[var(--border-main)] bg-[var(--bg-surface)]/95 p-6 shadow-2xl shadow-black/50 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-400">
+            <p className="text-sm uppercase tracking-[0.35em] text-[var(--accent-gold)]">
               {messages.ui.brandName}
             </p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text-main)]">
               {messages.ui.brandSubtitle}
             </h1>
           </div>

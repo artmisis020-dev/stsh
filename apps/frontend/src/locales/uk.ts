@@ -1,9 +1,9 @@
-import type { TranslationMessages } from "../i18n/types";
+import type { TranslationMessages } from "../i18n/types.js";
 
-export const ukMessages: TranslationMessages = {
+export const ukMessages = {
   ui: {
     brandName: "Starshield",
-    brandSubtitle: "Система керування ID",
+    brandSubtitle: "Система керування Термінал KIT",
     pendingAction: "Зачекайте...",
     idlePreview: "Надішліть форму, щоб побачити payload",
     checking: "перевірка",
@@ -16,13 +16,17 @@ export const ukMessages: TranslationMessages = {
     statusLabel: "Статус",
     roleLabel: "Роль",
     actionIdLabel: "ID дії",
-    clientRequestLabel: "Клієнтський запит",
+    terminalKitIdLabel: "ID Термінал KIT",
+    terminalKitLabel: "Термінал KIT",
+    clientRequestLabel: "ID Клієнтського запиту",
     providerRequestIdLabel: "ID запиту провайдера",
+    copyLabel: "Копіювати",
+    copiedLabel: "Скопійовано",
   },
   navigation: {
     login: "Вхід",
     register: "Реєстрація",
-    ids: "Форма ID",
+    terminalKits: "Термінал KIT",
     admin: "Адмін",
   },
   auth: {
@@ -40,7 +44,7 @@ export const ukMessages: TranslationMessages = {
       eyebrow: "Новий клієнт",
       title: "Створіть акаунт",
       description:
-        "Зареєструйте доступ до системи керування ID. Ваш акаунт буде очікувати погодження адміністратора.",
+        "Зареєструйте доступ до системи керування Термінал KIT. Ваш акаунт буде очікувати погодження адміністратора.",
       submitLabel: "Зареєструватися",
       successMessage: "Реєстрацію надіслано. Очікуйте погодження адміністратора.",
       alternateLabel: "Вже зареєстровані?",
@@ -49,7 +53,7 @@ export const ukMessages: TranslationMessages = {
     form: {
       asideTitle: "Сценарій доступу",
       asideDescription:
-        "Клієнти спочатку реєструються, очікують погодження адміністратора, а потім надсилають запити на активацію або деактивацію ID.",
+        "Клієнти спочатку реєструються, очікують погодження адміністратора, а потім надсилають запити на активацію або деактивацію Термінал KIT.",
       emailLabel: "Email",
       emailPlaceholder: "client@example.com",
       emailRequiredMessage: "Email є обов'язковим.",
@@ -61,32 +65,32 @@ export const ukMessages: TranslationMessages = {
   },
   clientRequest: {
     actionTypes: {
-      activate: "Активувати ID",
+      activate: "Активувати Термінал KIT",
       deactivateTemp: "Тимчасова деактивація",
       deactivatePerm: "Постійна деактивація",
     },
     page: {
       eyebrow: "Запити клієнта",
-      title: "Створення запиту на дію з ID",
+      title: "Створення запиту на дію з Термінал KIT",
       description:
-        "Надсилайте запити на активацію або деактивацію ID. Попередній перегляд payload нижче відображає структуру спільного DTO.",
+        "Надсилайте запити на активацію або деактивацію Термінал KIT. Попередній перегляд payload нижче відображає структуру спільного DTO.",
       submitLabel: "Надіслати запит",
-      addIdLabel: "Додати ще один ID",
-      removeIdLabel: "Видалити ID",
+      addIdLabel: "Додати ще один Термінал KIT",
+      removeIdLabel: "Видалити Термінал KIT",
       previewTitle: "Попередній перегляд payload",
       previewDescription:
         "Цей попередній перегляд формується зі значень форми та використовує спільні типи frontend/backend.",
       commentLabel: "Коментар",
       commentPlaceholder: "Додайте необов'язковий контекст для команди адміністраторів",
-      idsSectionTitle: "ID для обробки",
-      idsSectionDescription:
-        "Starlink Kit ID зазвичай є буквено-цифровим кодом довжиною 10-12 символів, найчастіше починається з KIT, наприклад KIT00000000.",
-      idValueLabel: "KIT ID",
-      idValuePlaceholder: "Приклад: KIT00000000",
+      terminalKitsSectionTitle: "Термінал KIT для обробки",
+      terminalKitsSectionDescription:
+        "Термінал KIT зазвичай є буквено-цифровим кодом довжиною 10-12 символів, що починається з KIT і продовжується цифрами, наприклад KIT00000000. Просто додайте цифри після попередньо заповненого префіксу KIT.",
+      terminalKitLabel: "Термінал KIT",
+      terminalKitPlaceholder: "Додайте цифри після KIT (напр. KIT00000000)",
       actionTypeLabel: "Тип дії",
-      idRequiredMessage: "KIT ID є обов'язковим.",
-      idFormatMessage:
-        "Введіть коректний Starlink Kit ID у форматі KIT, наприклад KIT00000000.",
+      terminalKitRequiredMessage: "Термінал KIT є обов'язковим.",
+      terminalKitFormatMessage:
+        "Введіть коректний Термінал KIT, додавши цифри після KIT, наприклад KIT00000000.",
     },
   },
   admin: {
@@ -94,11 +98,11 @@ export const ukMessages: TranslationMessages = {
       eyebrow: "Адмін-контроль",
       title: "Панель операцій",
       description:
-        "Переглядайте користувачів у черзі, опрацьовуйте дії з ID, створюйте запити провайдеру та заносьте результати з email.",
+        "Переглядайте користувачів у черзі, опрацьовуйте дії з Термінал KIT, створюйте запити провайдеру та заносьте результати з email.",
       usersSectionTitle: "Користувачі в очікуванні",
       usersSectionDescription:
         "Погоджуйте або відхиляйте нових клієнтів перед тим, як вони отримають доступ до workflow запитів.",
-      actionsSectionTitle: "ID дії в очікуванні",
+      actionsSectionTitle: "Дії з Термінал KIT в очікуванні",
       actionsSectionDescription:
         "Оберіть дії в очікуванні та об'єднайте їх у запит до провайдера із зовнішнім референсом.",
       providerRequestsSectionTitle: "Запити провайдеру",
@@ -111,6 +115,33 @@ export const ukMessages: TranslationMessages = {
       externalIdPlaceholder: "EMAIL-REQ-2026-001",
       externalIdRequiredMessage: "Зовнішній ID провайдера є обов'язковим.",
       selectedActionsLabel: "Обрано дій",
+      terminalKitsSectionTitle: "Усі Термінал KIT",
+      terminalKitsSectionDescription:
+        "Переглядайте всі Термінал KIT у системі разом із поточним станом та часом останнього оновлення.",
+      capacitySectionTitle: "Активна місткість",
+      capacitySectionDescription:
+        "Одночасно активними можуть бути лише 150 Термінал KIT. Відстежуйте поточне навантаження перед новими активаціями.",
+      capacityRemainingLabel: "Залишилось активних слотів",
+      historySectionTitle: "Історія дій",
+      historySectionDescription:
+        "Переглядайте повну історію дій із Термінал KIT, включно з посиланнями на клієнтські запити та переходами станів.",
+      historyEyebrow: "Історія адміна",
+      historyTitle: "Історія дій Термінал KIT",
+      historyDescription:
+        "Переглядайте всі зафіксовані дії з Термінал KIT разом із попереднім і кінцевим станом для аудиту та налагодження.",
+      openHistoryLabel: "Історія дій по Термінал KIT",
+      openTerminalKITSLabel: "Список всіх Термінал KIT",
+      openUsersPageLabel: "Список користувачів",
+      backToAdminLabel: "Назад до адмінки",
+      terminalKitColumnLabel: "Термінал KIT",
+      currentStateColumnLabel: "Поточний стан",
+      updatedAtColumnLabel: "Останнє оновлення",
+      dateColumnLabel: "Дата",
+      previousStateColumnLabel: "Попередній стан",
+      nextStateColumnLabel: "Новий стан",
+      emptyTerminalKits: "Термінал KIT ще не створені.",
+      emptyHistory: "Історія дій Термінал KIT поки що порожня.",
+      unknownStateLabel: "Невідомо",
       providerRequestIdLabel: "ID запиту провайдера",
       providerRequestIdPlaceholder: "Вставте ID запиту провайдера",
       providerRequestIdRequiredMessage: "ID запиту провайдера є обов'язковим.",
@@ -120,9 +151,25 @@ export const ukMessages: TranslationMessages = {
       resultingStateLabel: "Кінцевий стан",
       successLabel: "Операція успішна",
       submitResultLabel: "Надіслати результат провайдера",
+      commentLabel: "Коментар (необов'язково)",
+      commentPlaceholder: "Додайте необов'язковий коментар для цього запиту провайдера",
       emptyUsers: "Наразі немає користувачів у черзі.",
-      emptyActions: "Немає ID дій у стані очікування.",
+      emptyActions: "Немає дій з Термінал KIT у стані очікування.",
       emptyProviderRequests: "Запити провайдеру ще не створювалися.",
+      providerRequestTableIdHeader: "ID запиту провайдера",
+      providerRequestExternalIdLabel: "Зовнішній ID провайдера",
+      providerRequestTableDateCreatedHeader: "Дата створення",
+      providerRequestTableDateUpdatedHeader: "Останнє оновлення",
+      providerRequestTableStatusHeader: "Статус",
+      providerRequestTableCommentHeader: "Коментар",
+      providerRequestActionTableTerminalKitHeader: "Термінал KIT",
+      providerRequestActionTableTypeHeader: "Дія",
+      providerRequestActionTableTransitionHeader: "Перехід",
+      providerRequestActionTableStatusHeader: "Статус",
+      providerRequestActionTableResultHeader: "Результат",
+      providerRequestActionMarkDone: "Позначити успішним",
+      providerRequestActionMarkRejected: "Позначити відхиленим",
+      providerRequestActionNoItems: "Немає дій для цього запиту провайдера.",
     },
     resultStates: {
       active: "Активний",
@@ -130,4 +177,4 @@ export const ukMessages: TranslationMessages = {
       deactivatedPerm: "Постійно деактивований",
     },
   },
-};
+} as const;

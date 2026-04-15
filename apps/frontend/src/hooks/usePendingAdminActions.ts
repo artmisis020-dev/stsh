@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { idActionsService } from "../services/api/id-actions.service";
+import { terminalKitActionsService } from "../services/api/id-actions.service.js";
+import { TerminalKitActionDto } from "@starshield/shared";
 
 export function usePendingAdminActions() {
-  return useQuery({
+  return useQuery<TerminalKitActionDto[]  >({
     queryKey: ["pending-admin-actions"],
-    queryFn: idActionsService.getPendingAdminActions,
+    queryFn: terminalKitActionsService.getPendingAdminActions,
   });
 }

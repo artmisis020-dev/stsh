@@ -1,9 +1,9 @@
-import type { TranslationMessages } from "../i18n/types";
+import type { TranslationMessages } from "../i18n/types.js";
 
 export const enMessages: TranslationMessages = {
   ui: {
     brandName: "Starshield",
-    brandSubtitle: "ID Management System",
+    brandSubtitle: "Terminal KIT Management System",
     pendingAction: "Please wait...",
     idlePreview: "Submit the form to preview payload",
     checking: "checking",
@@ -16,13 +16,17 @@ export const enMessages: TranslationMessages = {
     statusLabel: "Status",
     roleLabel: "Role",
     actionIdLabel: "Action ID",
-    clientRequestLabel: "Client request",
+    terminalKitIdLabel: "Terminal KIT ID",
+    terminalKitLabel: "Terminal KIT",
+    clientRequestLabel: "Client request ID",
     providerRequestIdLabel: "Provider request ID",
+    copyLabel: "Copy",
+    copiedLabel: "Copied",
   },
   navigation: {
     login: "Login",
     register: "Register",
-    ids: "IDs Form",
+    terminalKits: "Terminal KITs",
     admin: "Admin",
   },
   auth: {
@@ -30,7 +34,7 @@ export const enMessages: TranslationMessages = {
       eyebrow: "Client Access",
       title: "Sign in to Starshield",
       description:
-        "Access your ID request workspace, monitor approvals, and send activation or deactivation requests.",
+        "Access your Terminal KIT request workspace, monitor approvals, and send activation or deactivation requests.",
       submitLabel: "Login",
       successMessage: "Login request sent successfully.",
       alternateLabel: "Need an account?",
@@ -40,7 +44,7 @@ export const enMessages: TranslationMessages = {
       eyebrow: "New Client",
       title: "Create your account",
       description:
-        "Register for access to the ID management system. Your account stays pending until an administrator approves it.",
+        "Register for access to the Terminal KIT management system. Your account stays pending until an administrator approves it.",
       submitLabel: "Register",
       successMessage: "Registration submitted. Wait for admin approval.",
       alternateLabel: "Already registered?",
@@ -49,7 +53,7 @@ export const enMessages: TranslationMessages = {
     form: {
       asideTitle: "Access flow",
       asideDescription:
-        "Clients register first, wait for admin approval, and then submit ID activation or deactivation requests.",
+        "Clients register first, wait for admin approval, and then submit Terminal KIT activation or deactivation requests.",
       emailLabel: "Email",
       emailPlaceholder: "client@example.com",
       emailRequiredMessage: "Email is required.",
@@ -61,32 +65,32 @@ export const enMessages: TranslationMessages = {
   },
   clientRequest: {
     actionTypes: {
-      activate: "Activate ID",
+      activate: "Activate Terminal KIT",
       deactivateTemp: "Temporary deactivation",
       deactivatePerm: "Permanent deactivation",
     },
     page: {
       eyebrow: "Client Requests",
-      title: "Create an ID action request",
+      title: "Create a Terminal KIT action request",
       description:
-        "Submit activation or deactivation requests for IDs. The backend payload preview below mirrors the shared DTO structure.",
+        "Submit activation or deactivation requests for Terminal KITs. The backend payload preview below mirrors the shared DTO structure.",
       submitLabel: "Submit request",
-      addIdLabel: "Add one more ID",
-      removeIdLabel: "Remove ID",
+      addIdLabel: "Add one more Terminal KIT",
+      removeIdLabel: "Remove Terminal KIT",
       previewTitle: "Payload preview",
       previewDescription:
         "This preview is generated from the submitted form and uses shared frontend-backend types.",
       commentLabel: "Comment",
       commentPlaceholder: "Add optional context for the admin team",
-      idsSectionTitle: "IDs to process",
-      idsSectionDescription:
-        "A Starlink Kit ID is usually a 10-12 character alphanumeric code, commonly starting with KIT, for example KIT00000000.",
-      idValueLabel: "KIT ID",
-      idValuePlaceholder: "Example: KIT00000000",
+      terminalKitsSectionTitle: "Terminal KITs to process",
+      terminalKitsSectionDescription:
+        "A Terminal KIT is usually a 10-12 character alphanumeric code starting with KIT followed by numbers, for example KIT00000000. Just add the numbers after the pre-filled KIT prefix.",
+      terminalKitLabel: "Terminal KIT",
+      terminalKitPlaceholder: "Add numbers after KIT (e.g. KIT00000000)",
       actionTypeLabel: "Action type",
-      idRequiredMessage: "KIT ID is required.",
-      idFormatMessage:
-        "Enter a valid Starlink Kit ID in KIT format, for example KIT00000000.",
+      terminalKitRequiredMessage: "Terminal KIT is required.",
+      terminalKitFormatMessage:
+        "Enter a valid Terminal KIT by adding numbers after KIT, for example KIT00000000.",
     },
   },
   admin: {
@@ -94,11 +98,11 @@ export const enMessages: TranslationMessages = {
       eyebrow: "Admin Control",
       title: "Operations dashboard",
       description:
-        "Review pending users, process ID actions, create provider requests, and record provider email results.",
+        "Review pending users, process Terminal KIT actions, create provider requests, and record provider email results.",
       usersSectionTitle: "Pending users",
       usersSectionDescription:
         "Approve or reject newly registered clients before they can access the request workflow.",
-      actionsSectionTitle: "Pending ID actions",
+      actionsSectionTitle: "Pending Terminal KIT actions",
       actionsSectionDescription:
         "Select pending actions and bundle them into a provider request with an external reference.",
       providerRequestsSectionTitle: "Provider requests",
@@ -111,6 +115,33 @@ export const enMessages: TranslationMessages = {
       externalIdPlaceholder: "EMAIL-REQ-2026-001",
       externalIdRequiredMessage: "Provider external ID is required.",
       selectedActionsLabel: "Selected actions",
+      terminalKitsSectionTitle: "All Terminal KITs",
+      terminalKitsSectionDescription:
+        "Review every Terminal KIT in the system with its current state and the latest update time.",
+      capacitySectionTitle: "Active capacity",
+      capacitySectionDescription:
+        "Only 150 Terminal KITs can remain active at the same time. Track the current load before approving more activations.",
+      capacityRemainingLabel: "Remaining active slots",
+      historySectionTitle: "Action history",
+      historySectionDescription:
+        "Browse the full history of Terminal KIT actions, including client request references and state transitions.",
+      historyEyebrow: "Admin History",
+      historyTitle: "Terminal KIT action history",
+      historyDescription:
+        "Inspect all recorded Terminal KIT actions with previous and resulting states for easier audit and debugging.",
+      openHistoryLabel: "Action history of all Terminal KITs actions",
+      openTerminalKITSLabel: "List of Terminal KITs",
+      openUsersPageLabel: "List of Users",
+      backToAdminLabel: "Back to admin",
+      terminalKitColumnLabel: "Terminal KIT",
+      currentStateColumnLabel: "Current state",
+      updatedAtColumnLabel: "Last updated",
+      dateColumnLabel: "Date",
+      previousStateColumnLabel: "Previous state",
+      nextStateColumnLabel: "Next state",
+      emptyTerminalKits: "No Terminal KITs have been created yet.",
+      emptyHistory: "No Terminal KIT action history yet.",
+      unknownStateLabel: "Unknown",
       providerRequestIdLabel: "Provider request ID",
       providerRequestIdPlaceholder: "Paste provider request ID",
       providerRequestIdRequiredMessage: "Provider request ID is required.",
@@ -120,9 +151,25 @@ export const enMessages: TranslationMessages = {
       resultingStateLabel: "Resulting state",
       successLabel: "Operation successful",
       submitResultLabel: "Submit provider result",
+      commentLabel: "Comment (optional)",
+      commentPlaceholder: "Add optional comment for this provider request",
       emptyUsers: "No pending users right now.",
-      emptyActions: "No pending ID actions available.",
+      emptyActions: "No pending Terminal KIT actions available.",
       emptyProviderRequests: "No provider requests have been created yet.",
+      providerRequestTableIdHeader: "Provider Request ID",
+      providerRequestExternalIdLabel: "Provider external ID",
+      providerRequestTableDateCreatedHeader: "Date Created",
+      providerRequestTableDateUpdatedHeader: "Last Updated",
+      providerRequestTableStatusHeader: "Status",
+      providerRequestTableCommentHeader: "Comment",
+      providerRequestActionTableTerminalKitHeader: "Terminal KIT",
+      providerRequestActionTableTypeHeader: "Action",
+      providerRequestActionTableTransitionHeader: "Transition",
+      providerRequestActionTableStatusHeader: "Status",
+      providerRequestActionTableResultHeader: "Result",
+      providerRequestActionMarkDone: "Mark done",
+      providerRequestActionMarkRejected: "Mark rejected",
+      providerRequestActionNoItems: "No terminal kit actions available for this provider request.",
     },
     resultStates: {
       active: "Active",

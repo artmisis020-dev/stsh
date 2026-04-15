@@ -1,3 +1,6 @@
+import { enMessages } from "../locales/en.js";
+import { ukMessages } from "../locales/uk.js";
+
 export type SupportedLanguage = "en" | "uk";
 
 export type TranslationMessages = {
@@ -16,13 +19,17 @@ export type TranslationMessages = {
     statusLabel: string;
     roleLabel: string;
     actionIdLabel: string;
+    terminalKitIdLabel: string;
+    terminalKitLabel: string;
     clientRequestLabel: string;
     providerRequestIdLabel: string;
+    copyLabel: string;
+    copiedLabel: string;
   };
   navigation: {
     login: string;
     register: string;
-    ids: string;
+    terminalKits: string;
     admin: string;
   };
   auth: {
@@ -73,13 +80,13 @@ export type TranslationMessages = {
       previewDescription: string;
       commentLabel: string;
       commentPlaceholder: string;
-      idsSectionTitle: string;
-      idsSectionDescription: string;
-      idValueLabel: string;
-      idValuePlaceholder: string;
+      terminalKitsSectionTitle: string;
+      terminalKitsSectionDescription: string;
+      terminalKitLabel: string;
+      terminalKitPlaceholder: string;
       actionTypeLabel: string;
-      idRequiredMessage: string;
-      idFormatMessage: string;
+      terminalKitRequiredMessage: string;
+      terminalKitFormatMessage: string;
     };
   };
   admin: {
@@ -100,6 +107,29 @@ export type TranslationMessages = {
       externalIdPlaceholder: string;
       externalIdRequiredMessage: string;
       selectedActionsLabel: string;
+      terminalKitsSectionTitle: string;
+      terminalKitsSectionDescription: string;
+      capacitySectionTitle: string;
+      capacitySectionDescription: string;
+      capacityRemainingLabel: string;
+      historySectionTitle: string;
+      historySectionDescription: string;
+      historyEyebrow: string;
+      historyTitle: string;
+      historyDescription: string;
+      openHistoryLabel: string;
+      openUsersPageLabel: string;
+      openTerminalKITSLabel: string;
+      backToAdminLabel: string;
+      terminalKitColumnLabel: string;
+      currentStateColumnLabel: string;
+      updatedAtColumnLabel: string;
+      dateColumnLabel: string;
+      previousStateColumnLabel: string;
+      nextStateColumnLabel: string;
+      emptyTerminalKits: string;
+      emptyHistory: string;
+      unknownStateLabel: string;
       providerRequestIdLabel: string;
       providerRequestIdPlaceholder: string;
       providerRequestIdRequiredMessage: string;
@@ -112,6 +142,30 @@ export type TranslationMessages = {
       emptyUsers: string;
       emptyActions: string;
       emptyProviderRequests: string;
+      providerRequestTableIdHeader: string;
+      providerRequestTableDateCreatedHeader: string;
+      providerRequestTableDateUpdatedHeader: string;
+      providerRequestTableStatusHeader: string;
+      providerRequestTableCommentHeader: string;
+      providerRequestActionTableTerminalKitHeader: string;
+      providerRequestActionTableTypeHeader: string;
+      providerRequestActionTableTransitionHeader: string;
+      providerRequestActionTableStatusHeader: string;
+      providerRequestActionTableResultHeader: string;
+      providerRequestActionNoItems: string;
+      commentLabel: string;
+      commentPlaceholder: string;
+      providerRequestActionMarkDone: string;
+      providerRequestActionMarkRejected: string;
+    };
+    userRoles: {
+      admin: string;
+      user: string;
+    };
+    providerRequestStatuses: {
+      pending: string;
+      approved: string;
+      rejected: string;
     };
     resultStates: {
       active: string;
@@ -120,3 +174,5 @@ export type TranslationMessages = {
     };
   };
 };
+
+export type T = typeof ukMessages | typeof enMessages;

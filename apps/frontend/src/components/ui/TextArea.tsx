@@ -1,7 +1,7 @@
 import type { TextareaHTMLAttributes } from "react";
 
 const TEXTAREA_CLASS_NAME =
-  "min-h-28 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-50 outline-none transition focus:border-cyan-400";
+  "min-h-28 w-full rounded-2xl border border-[var(--border-main)] bg-black/40 px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)]/70 focus:border-[var(--accent-gold)]";
 
 type TextAreaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 

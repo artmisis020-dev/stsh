@@ -6,9 +6,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { enMessages } from "../locales/en";
-import { ukMessages } from "../locales/uk";
-import type { SupportedLanguage, TranslationMessages } from "./types";
+import { enMessages } from "../locales/en.js";
+import { ukMessages } from "../locales/uk.js";
+import type { SupportedLanguage, TranslationMessages } from "./types.js";
 
 const LANGUAGE_STORAGE_KEY = "starshield-language";
 

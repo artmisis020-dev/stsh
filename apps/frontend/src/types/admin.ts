@@ -1,6 +1,6 @@
 import type {
   CreateProviderRequestDto,
-  IdActionDto,
+  TerminalKitActionDto,
   ProviderRequestDto,
   SubmitProviderResultsDto,
   UserDto,
@@ -8,7 +8,7 @@ import type {
 
 export type PendingUsersResponse = UserDto[];
 
-export type PendingAdminActionsResponse = IdActionDto[];
+export type PendingTerminalKitActionsResponse = TerminalKitActionDto[];
 
 export type ProviderRequestsResponse = ProviderRequestDto[];
 

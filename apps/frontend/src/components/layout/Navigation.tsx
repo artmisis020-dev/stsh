@@ -10,7 +10,7 @@ export function Navigation() {
   const navigationLinks = [
     { label: messages.navigation.login, href: APP_ROUTES.login },
     { label: messages.navigation.register, href: APP_ROUTES.register },
-    { label: messages.navigation.ids, href: APP_ROUTES.ids },
+    { label: messages.navigation.terminalKits, href: APP_ROUTES.terminalKits },
     { label: messages.navigation.admin, href: APP_ROUTES.admin },
   ];
 
@@ -23,8 +23,8 @@ export function Navigation() {
           className={({ isActive }) =>
             `${baseLinkClassName} ${
               isActive
-                ? "border-cyan-400 bg-cyan-400 text-slate-950"
-                : "border-slate-700 bg-slate-950/60 text-slate-200 hover:border-cyan-300 hover:text-cyan-200"
+                ? "border-[var(--accent-gold)] bg-[var(--accent-gold)] text-black"
+                : "border-[var(--border-main)] bg-black/35 text-[var(--text-main)] hover:border-[var(--accent-khaki)] hover:text-[var(--accent-gold)]"
             }`
           }
         >

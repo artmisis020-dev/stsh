@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
 :root {
+  --bg-main: #0a0a0a;
+  --bg-surface: #1a1a1a;
+  --bg-surface-soft: #161627;
+  --text-main: #f3efe4;
+  --text-muted: #c8b898;
+  --border-main: #3b3427;
+  --accent-gold: #d4af37;
+  --accent-gold-dark: #b8960c;
+  --accent-khaki: #c8b898;
+  --accent-olive: #4a6741;
+  --accent-red: #8b1a1a;
   font-family:
     "Space Grotesk",
     ui-sans-serif,
@@ -9,10 +20,11 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #f8fafc;
+  color: var(--text-main);
   background:
-    radial-gradient(circle at top, rgba(34, 211, 238, 0.18), transparent 28%),
-    linear-gradient(180deg, #020617 0%, #0f172a 48%, #020617 100%);
+    radial-gradient(circle at top, rgba(212, 175, 55, 0.12), transparent 26%),
+    radial-gradient(circle at 85% 15%, rgba(74, 103, 65, 0.14), transparent 24%),
+    linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -22,6 +34,7 @@
 body {
   margin: 0;
   min-width: 320px;
+  background: var(--bg-main);
 }
 
 * {

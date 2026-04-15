@@ -27,17 +27,17 @@ export function PendingUsersSection({
       description={pageCopy.usersSectionDescription}
     >
       {users.length === 0 ? (
-        <p className="text-sm text-slate-400">{pageCopy.emptyUsers}</p>
+        <p className="text-sm text-[var(--text-muted)]">{pageCopy.emptyUsers}</p>
       ) : (
         <div className="space-y-4">
           {users.map((user) => (
             <div
               key={user.id}
-              className="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 lg:flex-row lg:items-center lg:justify-between"
+              className="flex flex-col gap-4 rounded-2xl border border-[var(--border-main)] bg-black/35 p-4 lg:flex-row lg:items-center lg:justify-between"
             >
               <div>
-                <p className="font-medium text-white">{user.email}</p>
-                <p className="mt-1 text-sm text-slate-400">
+                <p className="font-medium text-[var(--text-main)]">{user.email}</p>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">
                   {messages.ui.statusLabel}: {user.status} • {messages.ui.roleLabel}: {user.role}
                 </p>
               </div>
@@ -51,7 +51,7 @@ export function PendingUsersSection({
                 </SubmitButton>
                 <button
                   type="button"
-                  className="rounded-full border border-rose-400/40 px-5 py-3 text-sm font-semibold text-rose-200 transition hover:border-rose-300 hover:text-white"
+                  className="rounded-full border border-[var(--accent-red)]/70 bg-[var(--accent-red)]/10 px-5 py-3 text-sm font-semibold text-[#f2c6c6] transition hover:border-[var(--accent-red)] hover:bg-[var(--accent-red)]/20 hover:text-white"
                   disabled={isRejecting}
                   onClick={() => onReject(user.id)}
                 >

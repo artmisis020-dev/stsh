@@ -1,9 +1,9 @@
 import type { SubmitClientRequestDto } from "@starshield/shared";
-import { AppShell } from "../components/layout/AppShell";
-import { ClientRequestForm } from "../components/client-requests/ClientRequestForm";
-import { useApiHealth } from "../hooks/useApiHealth";
-import { useSubmitClientRequest } from "../hooks/useSubmitClientRequest";
-import { useI18n } from "../i18n/I18nProvider";
+import { AppShell } from "../components/layout/AppShell.js";
+import { ClientRequestForm } from "../components/client-requests/ClientRequestForm.js";
+import { useApiHealth } from "../hooks/useApiHealth.js";
+import { useSubmitClientRequest } from "../hooks/useSubmitClientRequest.js";
+import { useI18n } from "../i18n/I18nProvider.js";
 
 export function IdsFormPage() {
   const { messages } = useI18n();

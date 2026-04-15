@@ -1,16 +1,12 @@
-import { useForm } from "react-hook-form";
-import type { ProviderRequestDto } from "@starshield/shared";
+import { Fragment, useState } from "react";
+import { ActionType, TerminalKitState, type ProviderRequestDto } from "@starshield/shared";
 import {
   PROVIDER_RESULT_DEFAULT_VALUES,
-} from "../../constants/admin";
-import { IdState } from "@starshield/shared";
-import { useI18n } from "../../i18n/I18nProvider";
-import type { ProviderResultFormValues } from "../../types/admin";
-import { FormField } from "../ui/FormField";
-import { SectionCard } from "../ui/SectionCard";
-import { Select } from "../ui/Select";
-import { SubmitButton } from "../ui/SubmitButton";
-import { TextInput } from "../ui/TextInput";
+} from "../../constants/admin.js";
+import { useI18n } from "../../i18n/I18nProvider.js";
+import type { ProviderResultFormValues } from "../../types/admin.js";
+import { SectionCard } from "../ui/SectionCard.js";
+import { useForm } from "react-hook-form";
 
 type ProviderRequestsSectionProps = {
   providerRequests: ProviderRequestDto[];
@@ -25,18 +21,85 @@ export function ProviderRequestsSection({
 }: ProviderRequestsSectionProps) {
   const { messages } = useI18n();
   const pageCopy = messages.admin.page;
+  const [expandedRequestIds, setExpandedRequestIds] = useState<Set<string>>(new Set());
   const resultStateOptions = [
-    { label: messages.admin.resultStates.active, value: IdState.Active },
-    { label: messages.admin.resultStates.deactivatedTemp, value: IdState.DeactivatedTemp },
-    { label: messages.admin.resultStates.deactivatedPerm, value: IdState.DeactivatedPerm },
+    { label: messages.admin.resultStates.active, value: TerminalKitState.Active },
+    { label: messages.admin.resultStates.deactivatedTemp, value: TerminalKitState.DeactivatedTemp },
+    { label: messages.admin.resultStates.deactivatedPerm, value: TerminalKitState.DeactivatedPerm },
   ];
   const { register, handleSubmit, reset } = useForm<ProviderResultFormValues>({
     defaultValues: PROVIDER_RESULT_DEFAULT_VALUES,
   });
 
+  const toggleRequestExpansion = (id: string) => {
+    setExpandedRequestIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const getResultingStateForAction = (actionType: ActionType): TerminalKitState => {
+    switch (actionType) {
+      case ActionType.Activate:
+        return TerminalKitState.Active;
+      case ActionType.DeactivateTemp:
+        return TerminalKitState.DeactivatedTemp;
+      case ActionType.DeactivatePerm:
+        return TerminalKitState.DeactivatedPerm;
+    }
+  };
+
+  const formatState = (value: TerminalKitState | null): string => {
+    if (!value) {
+      return "—";
+    }
+
+    return value
+      .split("_")
+      .map((segment) => segment[0].toUpperCase() + segment.slice(1))
+      .join(" ");
+  };
+
+  const formatActionType = (value: ActionType): string =>
+    value[0].toUpperCase() + value.slice(1).replace(/([A-Z])/g, " $1");
+
+  const displayTerminalKit = (requestAction: ProviderRequestDto["actions"][number]) =>
+    requestAction.terminalKitId;
+
+  const handleMarkActionResult = (
+    requestId: string,
+    action: ProviderRequestDto["actions"][number],
+    success: boolean,
+  ) => {
+    onSubmitProviderResult({
+      providerRequestId: requestId,
+      actionId: action.id,
+      success,
+      resultingState: success
+        ? getResultingStateForAction(action.actionType)
+        : action.previousState ?? TerminalKitState.Active,
+    });
+  };
+
   const submit = (values: ProviderResultFormValues) => {
     onSubmitProviderResult(values);
     reset(PROVIDER_RESULT_DEFAULT_VALUES);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
@@ -45,26 +108,177 @@ export function ProviderRequestsSection({
       description={pageCopy.providerRequestsSectionDescription}
     >
       <div className="space-y-6">
+        {/* Provider Requests Table */}
         {providerRequests.length === 0 ? (
           <p className="text-sm text-slate-400">{pageCopy.emptyProviderRequests}</p>
         ) : (
-          <div className="space-y-3">
-            {providerRequests.map((request) => (
-              <div
-                key={request.id}
-                className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"
-              >
-                <p className="font-medium text-white">{request.externalId}</p>
-                <p className="mt-1 break-all text-sm text-slate-400">
-                  {messages.ui.providerRequestIdLabel}: {request.id}
-                </p>
-                <p className="mt-1 text-sm text-slate-400">{messages.ui.statusLabel}: {request.status}</p>
-              </div>
-            ))}
+          <div className="overflow-x-auto rounded-lg border border-slate-800">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-800 bg-slate-950/50">
+                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                    {pageCopy.providerRequestTableIdHeader}
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                    {pageCopy.providerRequestTableDateCreatedHeader}
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                    {pageCopy.providerRequestTableDateUpdatedHeader}
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                    {pageCopy.providerRequestTableStatusHeader}
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                    {pageCopy.providerRequestTableCommentHeader}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {providerRequests.map((request, index) => (
+                  <Fragment key={`${request.id}-group`}>
+                    <tr
+                      key={`${request.id}-summary`}
+                      className={
+                        index % 2 === 0
+                          ? "border-b border-slate-800"
+                          : "border-b border-slate-800 bg-slate-950/30"
+                      }
+                    >
+                      <td className="px-4 py-3">
+                        <button
+                          type="button"
+                          className="flex items-center gap-2 text-left text-slate-300 hover:text-white"
+                          onClick={() => toggleRequestExpansion(request.id)}
+                        >
+                          <span
+                            className={`inline-block transition-transform ${expandedRequestIds.has(request.id) ? "rotate-90" : ""
+                              }`}
+                          >
+                            ▶
+                          </span>
+                          <span className="font-mono text-xs">{request.id}</span>
+                        </button>
+                        <div className="mt-1 text-xs text-slate-500">{request.externalId}</div>
+                      </td>
+                      <td className="px-4 py-3 text-slate-400">{formatDate(request.createdAt)}</td>
+                      <td className="px-4 py-3 text-slate-400">{formatDate(request.updatedAt)}</td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`inline-block rounded px-2 py-1 text-xs font-medium ${request.status === "pending"
+                            ? "bg-blue-500/20 text-blue-300"
+                            : request.status === "completed"
+                              ? "bg-green-500/20 text-green-300"
+                              : request.status === "failed"
+                                ? "bg-red-500/20 text-red-300"
+                                : "bg-yellow-500/20 text-yellow-300"
+                            }`}
+                        >
+                          {request.status}
+                        </span>
+                      </td>
+                      <td className="max-w-xs truncate px-4 py-3 text-slate-400">
+                        {request.comment || <span className="italic text-slate-500">—</span>}
+                      </td>
+                    </tr>
+
+                    {expandedRequestIds.has(request.id) && (
+                      <tr key={`${request.id}-details`} className="bg-slate-950/80">
+                        <td colSpan={5} className="px-4 py-4">
+                          <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/80">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="border-b border-slate-800 bg-slate-950/50">
+                                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                                    {pageCopy.providerRequestActionTableTerminalKitHeader}
+                                  </th>
+                                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                                    {pageCopy.providerRequestActionTableTypeHeader}
+                                  </th>
+                                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                                    {pageCopy.providerRequestActionTableTransitionHeader}
+                                  </th>
+                                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                                    {pageCopy.providerRequestActionTableStatusHeader}
+                                  </th>
+                                  <th className="px-4 py-3 text-left font-semibold text-slate-300">
+                                    {pageCopy.providerRequestActionTableResultHeader}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {request.actions.length === 0 ? (
+                                  <tr>
+                                    <td colSpan={5} className="px-4 py-3 text-sm text-slate-400">
+                                      {pageCopy.providerRequestActionNoItems}
+                                    </td>
+                                  </tr>
+                                ) : (
+                                  request.actions.map((action) => (
+                                    <tr
+                                      key={action.id}
+                                      className="border-b border-slate-800"
+                                    >
+                                      <td className="px-4 py-3 text-slate-300">
+                                        {displayTerminalKit(action)}
+                                      </td>
+                                      <td className="px-4 py-3 text-slate-400">
+                                        {formatActionType(action.actionType)}
+                                      </td>
+                                      <td className="px-4 py-3 text-slate-400">
+                                        {formatState(action.previousState)} → {formatState(action.resultingState ?? getResultingStateForAction(action.actionType))}
+                                      </td>
+                                      <td className="px-4 py-3">
+                                        <span
+                                          className={`inline-block rounded px-2 py-1 text-xs font-medium ${action.status === "pending_admin"
+                                            ? "bg-slate-500/20 text-slate-300"
+                                            : action.status === "pending_provider"
+                                              ? "bg-blue-500/20 text-blue-300"
+                                              : action.status === "completed"
+                                                ? "bg-green-500/20 text-green-300"
+                                                : "bg-red-500/20 text-red-300"
+                                            }`}
+                                        >
+                                          {action.status}
+                                        </span>
+                                      </td>
+                                      <td className="px-4 py-3">
+                                        <div className="flex flex-wrap gap-2">
+                                          <button
+                                            type="button"
+                                            className="rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1 text-xs font-semibold text-slate-200 transition hover:border-green-300 hover:text-green-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                            disabled={action.status !== "pending_provider"}
+                                            onClick={() => handleMarkActionResult(request.id, action, true)}
+                                          >
+                                            {pageCopy.providerRequestActionMarkDone}
+                                          </button>
+                                          <button
+                                            type="button"
+                                            className="rounded-full border border-slate-700 bg-slate-950/80 px-3 py-1 text-xs font-semibold text-slate-200 transition hover:border-red-300 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                            disabled={action.status !== "pending_provider"}
+                                            onClick={() => handleMarkActionResult(request.id, action, false)}
+                                          >
+                                            {pageCopy.providerRequestActionMarkRejected}
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
-        <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit(submit)}>
+        {/* Submit Results Form */}
+        {/* <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit(submit)}>
           <FormField
             htmlFor="providerRequestId"
             label={pageCopy.providerRequestIdLabel}
@@ -108,7 +322,7 @@ export function ProviderRequestsSection({
               {pageCopy.submitResultLabel}
             </SubmitButton>
           </div>
-        </form>
+        </form> */}
       </div>
     </SectionCard>
   );

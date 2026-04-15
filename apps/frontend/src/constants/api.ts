@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  baseUrl: import.meta.env.VITE_API_URL ?? "http://localhost:3001/api",
+  baseUrl: import.meta.env.VITE_API_URL ?? "http://localhost:3003/api",
   timeoutMs: 10000,
 } as const;
 
@@ -18,8 +18,13 @@ export const API_ENDPOINTS = {
     base: "/client-requests",
     my: "/client-requests/my",
   },
-  idActions: {
-    pendingAdmin: "/id-actions/pending-admin",
+  terminalKits: {
+    base: "/terminal-kits",
+    capacity: "/terminal-kits/capacity",
+  },
+  terminalKitActions: {
+    pendingAdmin: "/terminal-kit-actions/pending-admin",
+    history: "/terminal-kit-actions/history",
   },
   providerRequests: {
     base: "/provider-requests",

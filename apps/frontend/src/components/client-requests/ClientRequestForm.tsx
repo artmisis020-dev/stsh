@@ -1,19 +1,18 @@
-import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { ActionType, type SubmitClientRequestDto } from "@starshield/shared";
 import {
   CLIENT_REQUEST_DEFAULT_VALUES,
   isValidKitId,
   normalizeKitId,
-} from "../../constants/client-request";
-import { useI18n } from "../../i18n/I18nProvider";
-import { FormCard } from "../ui/FormCard";
-import { FormField } from "../ui/FormField";
-import { Select } from "../ui/Select";
-import { StatusPill } from "../ui/StatusPill";
-import { SubmitButton } from "../ui/SubmitButton";
-import { TextArea } from "../ui/TextArea";
-import { TextInput } from "../ui/TextInput";
+} from "../../constants/client-request.js";
+import { useI18n } from "../../i18n/I18nProvider.js";
+import { FormCard } from "../ui/FormCard.js";
+import { FormField } from "../ui/FormField.js";
+import { Select } from "../ui/Select.js";
+import { StatusPill } from "../ui/StatusPill.js";
+import { SubmitButton } from "../ui/SubmitButton.js";
+import { TextArea } from "../ui/TextArea.js";
+import { TextInput } from "../ui/TextInput.js";
 
 type ClientRequestFormProps = {
   healthStatusLabel: string;
@@ -33,7 +32,6 @@ export function ClientRequestForm({
     { label: messages.clientRequest.actionTypes.deactivateTemp, value: ActionType.DeactivateTemp },
     { label: messages.clientRequest.actionTypes.deactivatePerm, value: ActionType.DeactivatePerm },
   ];
-  const [payloadPreview, setPayloadPreview] = useState<SubmitClientRequestDto | null>(null);
   const {
     control,
     register,
@@ -49,21 +47,20 @@ export function ClientRequestForm({
   });
   const watchedActions = watch("actions");
   const lastAction = watchedActions[watchedActions.length - 1];
-  const isLastIdValid = isValidKitId(lastAction?.idValue ?? "");
+  const isLastTerminalKitValid = isValidKitId(lastAction?.terminalKit ?? "");
 
   const handleAddId = () => {
-    if (!isLastIdValid) {
+    if (!isLastTerminalKitValid) {
       return;
     }
 
     append({
-      idValue: "",
+      terminalKit: "KIT",
       actionType: lastAction?.actionType ?? CLIENT_REQUEST_DEFAULT_VALUES.actions[0].actionType,
     });
   };
 
   const handleFormSubmit = (values: SubmitClientRequestDto) => {
-    setPayloadPreview(values);
     onSubmit(values);
   };
 
@@ -72,17 +69,7 @@ export function ClientRequestForm({
       eyebrow={pageCopy.eyebrow}
       title={pageCopy.title}
       description={pageCopy.description}
-      aside={
-        <div>
-          <h3 className="text-lg font-semibold text-white">{pageCopy.previewTitle}</h3>
-          <p className="mt-2 text-sm text-slate-400">{pageCopy.previewDescription}</p>
-          <pre className="mt-6 overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs leading-6 text-cyan-200">
-            {payloadPreview
-              ? JSON.stringify(payloadPreview, null, 2)
-              : messages.ui.idlePreview}
-          </pre>
-        </div>
-      }
+
     >
       <div className="mb-6">
         <StatusPill label={messages.ui.apiHealth} value={healthStatusLabel} />
@@ -102,9 +89,11 @@ export function ClientRequestForm({
 
         <section className="space-y-4">
           <div>
-            <h3 className="text-lg font-semibold text-white">{pageCopy.idsSectionTitle}</h3>
+            <h3 className="text-lg font-semibold text-white">
+              {pageCopy.terminalKitsSectionTitle}
+            </h3>
             <p className="mt-2 text-sm leading-6 text-slate-400">
-              {pageCopy.idsSectionDescription}
+              {pageCopy.terminalKitsSectionDescription}
             </p>
           </div>
 
@@ -116,18 +105,18 @@ export function ClientRequestForm({
               >
                 <div className="grid gap-4 md:grid-cols-[1fr_220px_auto]">
                   <FormField
-                    htmlFor={`idValue-${field.id}`}
-                    label={`${pageCopy.idValueLabel} ${index + 1}`}
-                    error={errors.actions?.[index]?.idValue?.message}
+                    htmlFor={`terminalKit-${field.id}`}
+                    label={`${pageCopy.terminalKitLabel} ${index + 1}`}
+                    error={errors.actions?.[index]?.terminalKit?.message}
                   >
                     <TextInput
-                      id={`idValue-${field.id}`}
-                      placeholder={pageCopy.idValuePlaceholder}
-                      {...register(`actions.${index}.idValue`, {
-                        required: pageCopy.idRequiredMessage,
+                      id={`terminalKit-${field.id}`}
+                      placeholder={pageCopy.terminalKitPlaceholder}
+                      {...register(`actions.${index}.terminalKit`, {
+                        required: pageCopy.terminalKitRequiredMessage,
                         validate: (value) => {
                           if (!isValidKitId(value)) {
-                            return pageCopy.idFormatMessage;
+                            return pageCopy.terminalKitFormatMessage;
                           }
 
                           return true;
@@ -171,7 +160,7 @@ export function ClientRequestForm({
           <button
             type="button"
             className="rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
-            disabled={!isLastIdValid}
+            disabled={!isLastTerminalKitValid}
             onClick={handleAddId}
           >
             {pageCopy.addIdLabel}

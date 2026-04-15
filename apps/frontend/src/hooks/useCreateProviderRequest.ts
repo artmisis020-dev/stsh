@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreateProviderRequestDto } from "@starshield/shared";
+import { QUERY_KEYS } from "../constants/queryKeys";
 import { providerRequestsService } from "../services/api/provider-requests.service";
 
 export function useCreateProviderRequest() {
@@ -12,6 +13,7 @@ export function useCreateProviderRequest() {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["provider-requests"] }),
         queryClient.invalidateQueries({ queryKey: ["pending-admin-actions"] }),
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.terminalKitActionHistory }),
       ]);
     },
   });
