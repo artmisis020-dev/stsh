@@ -1,11 +1,11 @@
 import {
   ActionStatus,
   ActionType,
-  IdState,
+  TerminalKitState,
   ProviderRequestStatus,
   UserRole,
   UserStatus,
-} from "./enums";
+} from "./enums.js";
 
 export type RegisterDto = {
   email: string;
@@ -23,7 +23,7 @@ export type AuthResponseDto = {
 };
 
 export type ClientRequestActionInputDto = {
-  idValue: string;
+  terminalKit: string;
   actionType: ActionType;
 };
 
@@ -38,23 +38,29 @@ export type UserDto = {
   role: UserRole;
   status: UserStatus;
   createdAt: string;
+  updatedAt: string;
 };
 
-export type IdDto = {
+export type TerminalKitDto = {
   id: string;
-  value: string;
-  currentState: IdState;
+  terminalKit: string;
+  currentState: TerminalKitState;
   createdAt: string;
+  updatedAt: string;
 };
 
-export type IdActionDto = {
+export type TerminalKitActionDto = {
   id: string;
-  idId: string;
+  terminalKitId: string;
+  terminalKit?: string;
   actionType: ActionType;
   status: ActionStatus;
+  previousState: TerminalKitState | null;
+  resultingState: TerminalKitState | null;
   clientRequestId: string;
   providerRequestId: string | null;
   createdAt: string;
+  updatedAt: string;
 };
 
 export type ClientRequestDto = {
@@ -62,18 +68,20 @@ export type ClientRequestDto = {
   userId: string;
   comment: string;
   createdAt: string;
-  actions: IdActionDto[];
+  updatedAt: string;
+  actions: TerminalKitActionDto[];
 };
 
 export type CreateProviderRequestDto = {
   externalId: string;
   actionIds: string[];
+  comment?: string;
 };
 
 export type ProviderRequestResultItemDto = {
   actionId: string;
   success: boolean;
-  resultingState: IdState;
+  resultingState: TerminalKitState;
 };
 
 export type SubmitProviderResultsDto = {
@@ -83,14 +91,29 @@ export type SubmitProviderResultsDto = {
 export type ProviderRequestDto = {
   id: string;
   externalId: string;
+  comment: string;
   status: ProviderRequestStatus;
   createdAt: string;
+  updatedAt: string;
+  actions: TerminalKitActionDto[];
 };
 
-export type AuditLogDto = {
+export type TerminalKitCapacityDto = {
+  activeCount: number;
+  limit: number;
+  remaining: number;
+  utilizationPercent: number;
+};
+
+export type TerminalKitActionHistoryDto = {
   id: string;
-  idId: string;
-  prevState: IdState;
-  newState: IdState;
+  terminalKitId: string;
+  terminalKit: string;
+  clientRequestId: string;
+  actionType: ActionType;
+  status: ActionStatus;
+  previousState: TerminalKitState | null;
+  resultingState: TerminalKitState | null;
   createdAt: string;
+  updatedAt: string;
 };

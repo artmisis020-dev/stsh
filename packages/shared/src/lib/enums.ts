@@ -1,4 +1,5 @@
-export enum IdState {
+export enum TerminalKitState {
+  Initiated = "initiated",
   Active = "active",
   DeactivatedTemp = "deactivated_temp",
   DeactivatedPerm = "deactivated_perm",

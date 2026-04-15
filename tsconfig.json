@@ -1,3 +1,6 @@
 {
-  "extends": "./tsconfig.base.json"
+  "extends": "@starshield/typescript-config/base.json",
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
 }

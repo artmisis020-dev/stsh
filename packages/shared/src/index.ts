@@ -1,2 +1,2 @@
-export * from "./lib/enums";
-export * from "./lib/dtos";
+export * from "./lib/enums.js";
+export * from "./lib/dtos.js";

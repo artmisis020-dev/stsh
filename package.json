@@ -2,16 +2,23 @@
   "name": "starshield",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "backend:dev": "pnpm --filter @starshield/backend dev",
+    "frontend:dev": "pnpm --filter @starshield/frontend dev",
+    "shared:build": "pnpm --filter @starshield/shared build",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
-    "turbo": "^2.0.14",
+    "@starshield/typescript-config": "workspace:*",
+    "turbo": "^2.9.6",
     "typescript": "6.0.2"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.0.1"
   }
 }
