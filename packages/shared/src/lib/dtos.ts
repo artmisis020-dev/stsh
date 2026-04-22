@@ -10,6 +10,7 @@ import {
 export type RegisterDto = {
   email: string;
   password: string;
+  login: string;
 };
 
 export type LoginDto = {
@@ -36,6 +37,7 @@ export type UserDto = {
   id: string;
   email: string;
   role: UserRole;
+  login: string;
   status: UserStatus;
   createdAt: string;
   updatedAt: string;
@@ -52,7 +54,7 @@ export type TerminalKitDto = {
 export type TerminalKitActionDto = {
   id: string;
   terminalKitId: string;
-  terminalKit?: string;
+  terminalKit: string;
   actionType: ActionType;
   status: ActionStatus;
   previousState: TerminalKitState | null;
