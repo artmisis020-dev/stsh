@@ -1,7 +1,7 @@
 import type { TerminalKitDto } from "@starshield/shared";
-import { useI18n } from "../../i18n/I18nProvider";
-import { CopyButton } from "../ui/CopyButton";
-import { SectionCard } from "../ui/SectionCard";
+import { useI18n } from "../../i18n/I18nProvider.js";
+import { CopyButton } from "../ui/CopyButton.js";
+import { SectionCard } from "../ui/SectionCard.js";
 
 type TerminalKitsSectionProps = {
   terminalKits: TerminalKitDto[];

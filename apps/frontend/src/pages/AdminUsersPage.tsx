@@ -9,8 +9,6 @@ export function AdminUsersPage() {
     const rejectUserMutation = useRejectUser();
     return (
         <div>
-            <h2 className="text-3xl font-bold text-[var(--text-main)]">Users</h2>
-            
             <PendingUsersSection
                 users={pendingUsersQuery.data ?? []}
                 isApproving={approveUserMutation.isPending}

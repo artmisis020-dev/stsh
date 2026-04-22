@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { ActionType, TerminalKitState, type ProviderRequestDto } from "@starshield/shared";
+import { ActionType, TerminalKitState, type ProviderRequestDto, type ClientRequestDto } from "@starshield/shared";
 import {
   PROVIDER_RESULT_DEFAULT_VALUES,
 } from "../../constants/admin.js";
@@ -12,10 +12,13 @@ type ProviderRequestsSectionProps = {
   providerRequests: ProviderRequestDto[];
   isSubmitting: boolean;
   onSubmitProviderResult: (values: ProviderResultFormValues) => void;
+  clientRequests: ClientRequestDto[];
+
 };
 
 export function ProviderRequestsSection({
   providerRequests,
+  clientRequests,
   isSubmitting,
   onSubmitProviderResult,
 }: ProviderRequestsSectionProps) {
@@ -69,7 +72,7 @@ export function ProviderRequestsSection({
     value[0].toUpperCase() + value.slice(1).replace(/([A-Z])/g, " $1");
 
   const displayTerminalKit = (requestAction: ProviderRequestDto["actions"][number]) =>
-    requestAction.terminalKitId;
+    requestAction.terminalKit;
 
   const handleMarkActionResult = (
     requestId: string,
@@ -108,7 +111,6 @@ export function ProviderRequestsSection({
       description={pageCopy.providerRequestsSectionDescription}
     >
       <div className="space-y-6">
-        {/* Provider Requests Table */}
         {providerRequests.length === 0 ? (
           <p className="text-sm text-slate-400">{pageCopy.emptyProviderRequests}</p>
         ) : (

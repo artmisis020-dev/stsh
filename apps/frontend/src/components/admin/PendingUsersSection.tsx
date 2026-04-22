@@ -1,7 +1,7 @@
 import type { UserDto } from "@starshield/shared";
-import { useI18n } from "../../i18n/I18nProvider";
-import { SectionCard } from "../ui/SectionCard";
-import { SubmitButton } from "../ui/SubmitButton";
+import { useI18n } from "../../i18n/I18nProvider.js";
+import { SectionCard } from "../ui/SectionCard.js";
+import { SubmitButton } from "../ui/SubmitButton.js";
 
 type PendingUsersSectionProps = {
   users: UserDto[];

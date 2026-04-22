@@ -1,6 +1,7 @@
 import { PendingActionsSection } from "../components/admin/PendingActionsSection.js";
 import { ProviderRequestsSection } from "../components/admin/ProviderRequestsSection.js";
 import { useCreateProviderRequest } from "../hooks/useCreateProviderRequest.js";
+import { useGetAllClientRequests } from "../hooks/useGetAllClientRequests.js";
 import { usePendingAdminActions } from "../hooks/usePendingAdminActions.js";
 import { useProviderRequests } from "../hooks/useProviderRequests.js";
 import { useSubmitProviderResults } from "../hooks/useSubmitProviderResults.js";
@@ -12,7 +13,7 @@ import type {
 export function AdminPage() {
   const pendingActionsQuery = usePendingAdminActions();
   const providerRequestsQuery = useProviderRequests();
-
+  const clientRequestsQuery = useGetAllClientRequests();
   const createProviderRequestMutation = useCreateProviderRequest();
   const submitProviderResultsMutation = useSubmitProviderResults();
 
@@ -40,12 +41,14 @@ export function AdminPage() {
 
       <PendingActionsSection
         actions={pendingActionsQuery.data ?? []}
+        clientRequests={clientRequestsQuery.data ?? []}
         isSubmitting={createProviderRequestMutation.isPending}
         onCreateProviderRequest={handleCreateProviderRequest}
       />
 
       <ProviderRequestsSection
         providerRequests={providerRequestsQuery.data ?? []}
+        clientRequests={clientRequestsQuery.data ?? []}
         isSubmitting={submitProviderResultsMutation.isPending}
         onSubmitProviderResult={handleSubmitProviderResult}
       />

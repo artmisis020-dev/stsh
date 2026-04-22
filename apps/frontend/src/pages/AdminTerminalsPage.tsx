@@ -8,7 +8,6 @@ export const AdminTerminalsPage = () => {
 
     return (
         <div>
-            <h2 className="text-3xl font-bold text-[var(--text-main)]">Terminal KITs</h2>
             <TerminalKitsSection
                 terminalKits={terminalKitsQuery.data ?? []}
                 copiedValue={copiedValue}
