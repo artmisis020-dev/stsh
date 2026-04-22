@@ -8,4 +8,9 @@ export class RegisterRequestDto implements RegisterDto {
   @IsString()
   @MinLength(8)
   password!: string;
+
+
+  @IsString()
+  @MinLength(4)
+  login!: string;
 }
