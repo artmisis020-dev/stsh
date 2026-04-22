@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Patch } from "@nestjs/common";
 import { UsersService } from "./users.service";
+import { UserStatus } from "@starshield/shared";
 
 @Controller("users")
 export class UsersController {
@@ -12,11 +13,11 @@ export class UsersController {
 
   @Patch(":id/approve")
   approve(@Param("id") id: string) {
-    return this.usersService.updateUserStatus(id, "approved");
+    return this.usersService.updateUserStatus(id, UserStatus.Approved);
   }
 
   @Patch(":id/reject")
   reject(@Param("id") id: string) {
-    return this.usersService.updateUserStatus(id, "rejected");
+    return this.usersService.updateUserStatus(id, UserStatus.Rejected);
   }
 }

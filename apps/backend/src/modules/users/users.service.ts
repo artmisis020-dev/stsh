@@ -1,31 +1,57 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { randomUUID } from "crypto";
 import { UserRole, UserStatus, type UserDto } from "@starshield/shared";
+import { PrismaService } from "../prisma/prisma.service";
+
+function toUserDto(user: {
+  id: string;
+  email: string;
+  role: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  login?: string;
+}): UserDto {
+  return {
+    id: user.id,
+    email: user.email,
+    role: user.role as UserRole,
+    status: user.status as UserStatus,
+    createdAt: user.createdAt.toISOString(),
+    updatedAt: user.updatedAt.toISOString(),
+    login: user.login ?? "",
+  };
+}
 
 @Injectable()
 export class UsersService {
-  private readonly users: UserDto[] = [
-    {
-      id: randomUUID(),
-      email: "pending.client@starshield.dev",
-      role: UserRole.Client,
-      status: UserStatus.Pending,
-      createdAt: new Date().toISOString(),
-    },
-  ];
+  constructor(private readonly prisma: PrismaService) {}
 
-  getPendingUsers() {
-    return this.users.filter((user) => user.status === UserStatus.Pending);
+  async getPendingUsers(): Promise<UserDto[]> {
+    const users = await this.prisma.user.findMany({
+      where: { status: UserStatus.Pending },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return users.map(toUserDto);
   }
 
-  updateUserStatus(id: string, status: UserStatus.Approved | UserStatus.Rejected) {
-    const user = this.users.find((entry) => entry.id === id);
+  async updateUserStatus(
+    id: string,
+    status: UserStatus.Approved | UserStatus.Rejected,
+  ): Promise<UserDto> {
+    const existingUser = await this.prisma.user.findUnique({
+      where: { id },
+    });
 
-    if (!user) {
+    if (!existingUser) {
       throw new NotFoundException("User not found.");
     }
 
-    user.status = status;
-    return user;
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { status },
+    });
+
+    return toUserDto(user);
   }
 }

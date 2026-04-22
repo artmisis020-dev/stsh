@@ -5,8 +5,9 @@ import { PrismaModule } from "./modules/prisma/prisma.module";
 import { UsersModule } from "./modules/users/users.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ClientRequestsModule } from "./modules/client-requests/client-requests.module";
-import { IdActionsModule } from "./modules/id-actions/id-actions.module";
+import { TerminalKitActionsModule } from "./modules/id-actions/id-actions.module";
 import { ProviderRequestsModule } from "./modules/provider-requests/provider-requests.module";
+import { TerminalKitsModule } from "./modules/terminal-kits/terminal-kits.module";
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { ProviderRequestsModule } from "./modules/provider-requests/provider-req
     AuthModule,
     UsersModule,
     ClientRequestsModule,
-    IdActionsModule,
+    TerminalKitsModule,
+    TerminalKitActionsModule,
     ProviderRequestsModule,
   ],
 })
