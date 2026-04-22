@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CreateProviderRequestDto } from "@starshield/shared";
-import { QUERY_KEYS } from "../constants/queryKeys";
-import { providerRequestsService } from "../services/api/provider-requests.service";
+import { QUERY_KEYS } from "../constants/queryKeys.js";
+import { providerRequestsService } from "../services/api/provider-requests.service.js";
 
 export function useCreateProviderRequest() {
   const queryClient = useQueryClient();

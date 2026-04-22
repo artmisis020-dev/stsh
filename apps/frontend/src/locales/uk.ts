@@ -15,11 +15,15 @@ export const ukMessages = {
     apiHealth: "Стан API:",
     statusLabel: "Статус",
     roleLabel: "Роль",
+    userLabel: "ID користувача",
     actionIdLabel: "ID дії",
     terminalKitIdLabel: "ID Термінал KIT",
     terminalKitLabel: "Термінал KIT",
     clientRequestLabel: "ID Клієнтського запиту",
     providerRequestIdLabel: "ID запиту провайдера",
+    actionTypeLabel: "Тип дії",
+    createdAtLabel: "Створено",
+    updatedAtLabel: "Оновлено",
     copyLabel: "Копіювати",
     copiedLabel: "Скопійовано",
   },
@@ -65,7 +69,7 @@ export const ukMessages = {
   },
   clientRequest: {
     actionTypes: {
-      activate: "Активувати Термінал KIT",
+      activate: "Активація",
       deactivateTemp: "Тимчасова деактивація",
       deactivatePerm: "Постійна деактивація",
     },
@@ -74,6 +78,12 @@ export const ukMessages = {
       title: "Створення запиту на дію з Термінал KIT",
       description:
         "Надсилайте запити на активацію або деактивацію Термінал KIT. Попередній перегляд payload нижче відображає структуру спільного DTO.",
+      chooseRequestTypeTitle: "Оберіть тип запиту",
+      chooseRequestTypeDescription:
+        "Спочатку оберіть, чи хочете створити запит на активацію, чи запит на деактивацію.",
+      createActivationRequestLabel: "Створити запит на активацію",
+      createDeactivationRequestLabel: "Створити запит на деактивацію",
+      changeRequestTypeLabel: "Змінити тип запиту",
       submitLabel: "Надіслати запит",
       addIdLabel: "Додати ще один Термінал KIT",
       removeIdLabel: "Видалити Термінал KIT",
@@ -105,6 +115,9 @@ export const ukMessages = {
       actionsSectionTitle: "Дії з Термінал KIT в очікуванні",
       actionsSectionDescription:
         "Оберіть дії в очікуванні та об'єднайте їх у запит до провайдера із зовнішнім референсом.",
+      clientRequestsTableTitle: "Запити користувачів",
+      clientRequestsTableDescription:
+        "Переглядайте надіслані клієнтські запити та розгорніть рядок, щоб побачити дії з терміналами всередині нього.",
       providerRequestsSectionTitle: "Запити провайдеру",
       providerRequestsSectionDescription:
         "Відстежуйте існуючі запити провайдеру та вручну вносьте результати з email-відповіді.",
@@ -155,7 +168,9 @@ export const ukMessages = {
       commentPlaceholder: "Додайте необов'язковий коментар для цього запиту провайдера",
       emptyUsers: "Наразі немає користувачів у черзі.",
       emptyActions: "Немає дій з Термінал KIT у стані очікування.",
+      emptyClientRequests: "Запити користувачів відсутні.",
       emptyProviderRequests: "Запити провайдеру ще не створювалися.",
+      clientRequestActionsCountLabel: "Кількість терміналів",
       providerRequestTableIdHeader: "ID запиту провайдера",
       providerRequestExternalIdLabel: "Зовнішній ID провайдера",
       providerRequestTableDateCreatedHeader: "Дата створення",
@@ -176,5 +191,6 @@ export const ukMessages = {
       deactivatedTemp: "Тимчасово деактивований",
       deactivatedPerm: "Постійно деактивований",
     },
+
   },
 } as const;

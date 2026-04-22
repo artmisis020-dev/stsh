@@ -18,11 +18,15 @@ export type TranslationMessages = {
     apiHealth: string;
     statusLabel: string;
     roleLabel: string;
+    userLabel: string;
     actionIdLabel: string;
     terminalKitIdLabel: string;
     terminalKitLabel: string;
     clientRequestLabel: string;
     providerRequestIdLabel: string;
+    actionTypeLabel: string;
+    createdAtLabel: string;
+    updatedAtLabel: string;
     copyLabel: string;
     copiedLabel: string;
   };
@@ -73,6 +77,11 @@ export type TranslationMessages = {
       eyebrow: string;
       title: string;
       description: string;
+      chooseRequestTypeTitle: string;
+      chooseRequestTypeDescription: string;
+      createActivationRequestLabel: string;
+      createDeactivationRequestLabel: string;
+      changeRequestTypeLabel: string;
       submitLabel: string;
       addIdLabel: string;
       removeIdLabel: string;
@@ -98,6 +107,8 @@ export type TranslationMessages = {
       usersSectionDescription: string;
       actionsSectionTitle: string;
       actionsSectionDescription: string;
+      clientRequestsTableTitle: string;
+      clientRequestsTableDescription: string;
       providerRequestsSectionTitle: string;
       providerRequestsSectionDescription: string;
       approveLabel: string;
@@ -141,7 +152,9 @@ export type TranslationMessages = {
       submitResultLabel: string;
       emptyUsers: string;
       emptyActions: string;
+      emptyClientRequests: string;
       emptyProviderRequests: string;
+      clientRequestActionsCountLabel: string;
       providerRequestTableIdHeader: string;
       providerRequestTableDateCreatedHeader: string;
       providerRequestTableDateUpdatedHeader: string;

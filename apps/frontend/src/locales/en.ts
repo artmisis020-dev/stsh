@@ -15,11 +15,15 @@ export const enMessages: TranslationMessages = {
     apiHealth: "API health:",
     statusLabel: "Status",
     roleLabel: "Role",
+    userLabel: "User ID",
     actionIdLabel: "Action ID",
     terminalKitIdLabel: "Terminal KIT ID",
     terminalKitLabel: "Terminal KIT",
     clientRequestLabel: "Client request ID",
     providerRequestIdLabel: "Provider request ID",
+    actionTypeLabel: "Action Type",
+    createdAtLabel: "Created At",
+    updatedAtLabel: "Updated At",
     copyLabel: "Copy",
     copiedLabel: "Copied",
   },
@@ -74,6 +78,12 @@ export const enMessages: TranslationMessages = {
       title: "Create a Terminal KIT action request",
       description:
         "Submit activation or deactivation requests for Terminal KITs. The backend payload preview below mirrors the shared DTO structure.",
+      chooseRequestTypeTitle: "Choose request type",
+      chooseRequestTypeDescription:
+        "Start by choosing whether you want to create an activation request or a deactivation request.",
+      createActivationRequestLabel: "Create Activation request",
+      createDeactivationRequestLabel: "Create Deactivation request",
+      changeRequestTypeLabel: "Change request type",
       submitLabel: "Submit request",
       addIdLabel: "Add one more Terminal KIT",
       removeIdLabel: "Remove Terminal KIT",
@@ -105,6 +115,9 @@ export const enMessages: TranslationMessages = {
       actionsSectionTitle: "Pending Terminal KIT actions",
       actionsSectionDescription:
         "Select pending actions and bundle them into a provider request with an external reference.",
+      clientRequestsTableTitle: "Client requests",
+      clientRequestsTableDescription:
+        "Browse submitted client requests and expand a row to review the terminal actions inside it.",
       providerRequestsSectionTitle: "Provider requests",
       providerRequestsSectionDescription:
         "Track existing provider requests and manually enter returned results from the provider email.",
@@ -155,9 +168,11 @@ export const enMessages: TranslationMessages = {
       commentPlaceholder: "Add optional comment for this provider request",
       emptyUsers: "No pending users right now.",
       emptyActions: "No pending Terminal KIT actions available.",
+      emptyClientRequests: "No client requests available.",
       emptyProviderRequests: "No provider requests have been created yet.",
+      clientRequestActionsCountLabel: "Actions",
       providerRequestTableIdHeader: "Provider Request ID",
-      providerRequestExternalIdLabel: "Provider external ID",
+      // providerRequestExternalIdLabel: "Provider external ID",
       providerRequestTableDateCreatedHeader: "Date Created",
       providerRequestTableDateUpdatedHeader: "Last Updated",
       providerRequestTableStatusHeader: "Status",
@@ -175,6 +190,15 @@ export const enMessages: TranslationMessages = {
       active: "Active",
       deactivatedTemp: "Temporarily deactivated",
       deactivatedPerm: "Permanently deactivated",
+    },
+    userRoles: {
+      admin: "Admin",
+      user: "User",
+    },
+    providerRequestStatuses: {
+      approved: "Approved",
+      pending: "Pending",
+      rejected: "Rejected",
     },
   },
 };
