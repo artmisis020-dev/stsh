@@ -1,8 +1,8 @@
-# ID Management System
+# Terminal KIT Management System
 
 ## 📌 Overview
 
-This project is a full-stack web application that allows clients to request activation/deactivation of IDs, and administrators to process those requests and interact with a third-party provider.
+This project is a full-stack web application that allows clients to request activation/deactivation of Terminal KITs, and administrators to process those requests and interact with a third-party provider.
 
 The system consists of:
 
@@ -22,17 +22,17 @@ The system consists of:
 * Login
 * Submit requests with:
 
-  * Activation IDs
-  * Temporary deactivation IDs
-  * Permanent deactivation IDs
+  * Activation Terminal KITs
+  * Temporary deactivation Terminal KITs
+  * Permanent deactivation Terminal KITs
   * Comment
 * View own request history
 
 ### Admin
 
 * Approve or reject users
-* View pending ID actions
-* Select IDs and create provider requests
+* View pending Terminal KIT actions
+* Select Terminal KITs and create provider requests
 * Manually input provider responses (from email)
 * Track request results
 
@@ -40,7 +40,7 @@ The system consists of:
 
 ## 🧠 Domain Model
 
-### ID State
+### Terminal KIT State
 
 * `active`
 * `deactivated_temp`
@@ -71,6 +71,7 @@ The system consists of:
 * role (admin | client)
 * status (pending | approved | rejected)
 * created_at
+* updated_at
 
 ### client_requests
 
@@ -78,23 +79,28 @@ The system consists of:
 * user_id
 * comment
 * created_at
+* updated_at
 
-### ids
+### terminal_kits
 
 * id
-* value (unique)
+* terminal_kit (unique)
 * current_state
 * created_at
+* updated_at
 
-### id_actions
+### terminal_kit_actions
 
 * id
-* id_id
+* terminal_kit_id
 * action_type
 * status
+* previous_state (nullable)
+* resulting_state (nullable)
 * client_request_id
 * provider_request_id (nullable)
 * created_at
+* updated_at
 
 ### provider_requests
 
@@ -102,14 +108,7 @@ The system consists of:
 * external_id
 * status
 * created_at
-
-### audit_logs
-
-* id
-* id_id
-* prev_state
-* new_state
-* created_at
+* updated_at
 
 ---
 
@@ -117,17 +116,17 @@ The system consists of:
 
 ### Validation Rules
 
-* Active ID cannot be activated again
-* Permanently deactivated ID cannot be activated
-* Temporarily deactivated ID can be activated
-* Active ID can be deactivated
-* ID cannot have more than one active action at a time
+* Active Terminal KIT cannot be activated again
+* Permanently deactivated Terminal KIT cannot be activated
+* Temporarily deactivated Terminal KIT can be activated
+* Active Terminal KIT can be deactivated
+* Terminal KIT cannot have more than one active action at a time
 
 ### Request Rules
 
 * Client requests are immutable
 * One request can contain multiple actions
-* Duplicate IDs in a single request are not allowed
+* Duplicate Terminal KITs in a single request are not allowed
 
 ### Provider Interaction
 
@@ -145,7 +144,7 @@ The system consists of:
 2. Wait for approval
 3. Login
 4. Submit request
-5. System validates and creates ID actions
+5. System validates and creates Terminal KIT actions
 
 ### Admin Flow
 
@@ -155,7 +154,7 @@ The system consists of:
 4. Create provider request
 5. Wait for email response
 6. Input results
-7. System updates states and logs
+7. System updates states on terminal kit actions and terminal kits
 
 ---
 
@@ -177,9 +176,9 @@ The system consists of:
 * POST /client-requests
 * GET /client-requests/my
 
-### ID Actions
+### Terminal KIT Actions
 
-* GET /id-actions/pending-admin
+* GET /terminal-kit-actions/pending-admin
 
 ### Provider Requests
 
@@ -230,7 +229,7 @@ The system consists of:
 
 ## 🧾 Audit Logging
 
-* Tracks ID state transitions
+* Tracks Terminal KIT state transitions
 * Stores previous and next state
 
 ---
@@ -246,8 +245,8 @@ The system consists of:
 
 ## ⚠️ Key Design Principles
 
-1. One active action per ID at a time
-2. Separate ID state from action state
+1. One active action per Terminal KIT at a time
+2. Separate Terminal KIT state from action state
 3. Keep client requests immutable
 4. Prefer simple and explicit workflows
 
@@ -280,3 +279,18 @@ The system consists of:
 ---
 
 This document serves as a source of truth for developers and AI tools (e.g., GitHub Copilot) to understand system design and generate consistent code.
+
+<!-- 
+
+3) Also need to add check after user pressed submit we should send request to submit if all terminal kits correct, what i mean here: 
+ - id for activation should not be already in active state
+- id for deletion should not be in deleted
+ - any terminal kits should not be already in some of our pending states 
+Later we maybe can add even more. but for lets keep this logic.
+For our check we send terminal kits with possible  -->
+
+
+
+
+bg - #0000
+text - #EDD7BF
