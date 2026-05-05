@@ -32,6 +32,7 @@ export const ukMessages = {
     register: "Реєстрація",
     terminalKits: "Термінал KIT",
     admin: "Адмін",
+    logout: "Вийти",
   },
   auth: {
     login: {

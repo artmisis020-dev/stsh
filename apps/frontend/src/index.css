@@ -11,7 +11,10 @@
   --accent-gold-dark: #b8960c;
   --accent-khaki: #c8b898;
   --accent-olive: #4a6741;
+  --accent-olive-light: #cfe0c7;
   --accent-red: #8b1a1a;
+  --text-error: #f2c6c6;
+  --bg-disabled: #5b5344;
   font-family:
     "Space Grotesk",
     ui-sans-serif,

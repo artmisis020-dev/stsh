@@ -32,6 +32,7 @@ export const enMessages: TranslationMessages = {
     register: "Register",
     terminalKits: "Terminal KITs",
     admin: "Admin",
+    logout: "Logout",
   },
   auth: {
     login: {

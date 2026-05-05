@@ -51,7 +51,7 @@ export function PendingUsersSection({
                 </SubmitButton>
                 <button
                   type="button"
-                  className="rounded-full border border-[var(--accent-red)]/70 bg-[var(--accent-red)]/10 px-5 py-3 text-sm font-semibold text-[#f2c6c6] transition hover:border-[var(--accent-red)] hover:bg-[var(--accent-red)]/20 hover:text-white"
+                  className="rounded-full border border-[var(--accent-red)]/70 bg-[var(--accent-red)]/10 px-5 py-3 text-sm font-semibold text-[var(--text-error)] transition hover:border-[var(--accent-red)] hover:bg-[var(--accent-red)]/20 hover:text-white"
                   disabled={isRejecting}
                   onClick={() => onReject(user.id)}
                 >

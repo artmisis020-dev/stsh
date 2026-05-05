@@ -17,7 +17,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={disabled || isPending}
-      className="rounded-full bg-[var(--accent-gold)] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[var(--accent-gold-dark)] disabled:cursor-not-allowed disabled:bg-[#5b5344] disabled:text-[var(--text-muted)]"
+      className="rounded-full bg-[var(--accent-gold)] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[var(--accent-gold-dark)] disabled:cursor-not-allowed disabled:bg-[var(--bg-disabled)] disabled:text-[var(--text-muted)]"
       {...props}
     >
       {isPending ? messages.ui.pendingAction : children}

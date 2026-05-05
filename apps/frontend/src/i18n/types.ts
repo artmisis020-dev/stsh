@@ -35,6 +35,7 @@ export type TranslationMessages = {
     register: string;
     terminalKits: string;
     admin: string;
+    logout: string;
   };
   auth: {
     login: {
