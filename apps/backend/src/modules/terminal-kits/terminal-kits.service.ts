@@ -32,6 +32,23 @@ export class TerminalKitsService {
     return terminalKits.map(toTerminalKitDto);
   }
 
+  async getTerminalKitsByUserId(userId: string): Promise<TerminalKitDto[]> {
+    const terminalKits = await this.prisma.terminalKit.findMany({
+      where: {
+        actions: {
+          some: {
+            clientRequest: {
+              userId,
+            },
+          },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    return terminalKits.map(toTerminalKitDto);
+  }
+
   async getCapacity(): Promise<TerminalKitCapacityDto> {
     const activeCount = await this.prisma.terminalKit.count({
       where: { currentState: TerminalKitState.Active },
