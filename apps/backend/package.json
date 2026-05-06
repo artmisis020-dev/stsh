@@ -6,7 +6,7 @@
     "clean": "find src -type f \\( -name '*.js' -o -name '*.js.map' -o -name '*.d.ts' \\) -delete && rm -rf dist tsconfig.tsbuildinfo tsconfig.build.tsbuildinfo",
     "prebuild": "pnpm run clean && pnpm --filter @starshield/shared build",
     "build": "nest build --config nest-cli.json --path tsconfig.build.json",
-    "predev": "pnpm run clean && pnpm --filter @starshield/shared build",
+    "predev": "pnpm run clean",
     "dev": "nest start --watch --config nest-cli.json --path tsconfig.build.json",
     "db:init": "prisma db push --schema prisma/schema.prisma",
     "db:seed": "prisma db seed --schema prisma/schema.prisma",
@@ -42,7 +42,8 @@
     "eslint": "^9.12.0",
     "prisma": "^6.2.0",
     "tsx": "^4.19.4",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.59.2"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
