@@ -1,13 +1,18 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from "class-validator";
+import { ArrayMinSize, IsArray, IsNotEmpty, IsString, IsOptional } from "class-validator";
 import type { CreateProviderRequestDto } from "@starshield/shared";
 
 export class CreateProviderRequestBodyDto implements CreateProviderRequestDto {
   @IsString()
   @IsNotEmpty()
-  externalId!: string;
+  readonly externalId!: string;
 
   @IsArray()
   @ArrayMinSize(1)
   @IsString({ each: true })
-  actionIds!: string[];
+  @IsNotEmpty({ each: true })
+  readonly actionIds!: string[];
+
+  @IsString()
+  @IsOptional()
+  readonly comment?: string;
 }

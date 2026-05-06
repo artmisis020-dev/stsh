@@ -1,22 +1,25 @@
 import { Type } from "class-transformer";
-import { ArrayMinSize, IsArray, IsBoolean, IsEnum, IsString, ValidateNested } from "class-validator";
-import { IdState, type ProviderRequestResultItemDto, type SubmitProviderResultsDto } from "@starshield/shared";
+import { ArrayMinSize, IsArray, IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf, ValidateNested } from "class-validator";
+import { TerminalKitState, type ProviderRequestResultItemDto, type SubmitProviderResultsDto } from "@starshield/shared";
 
-class ProviderResultItemBodyDto implements ProviderRequestResultItemDto {
+class ProviderResultItemBodyDto {
   @IsString()
-  actionId!: string;
+  @IsNotEmpty()
+  readonly actionId!: string;
 
   @IsBoolean()
-  success!: boolean;
+  readonly success!: boolean;
 
-  @IsEnum(IdState)
-  resultingState!: IdState;
+  @ValidateIf((o: ProviderResultItemBodyDto) => o.success === true)
+  @IsEnum(TerminalKitState)
+  @IsOptional()
+  readonly resultingState?: TerminalKitState;
 }
 
-export class SubmitProviderResultsBodyDto implements SubmitProviderResultsDto {
+export class SubmitProviderResultsBodyDto {
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => ProviderResultItemBodyDto)
-  results!: ProviderResultItemBodyDto[];
+  readonly results!: ProviderResultItemBodyDto[];
 }
