@@ -50,22 +50,6 @@ export function AuthForm({
       eyebrow={content.eyebrow}
       title={content.title}
       description={content.description}
-      aside={
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-white">{formCopy.asideTitle}</h3>
-          <p className="text-sm leading-6 text-slate-400">{formCopy.asideDescription}</p>
-          {successMessage ? (
-            <p className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
-              {successMessage}
-            </p>
-          ) : null}
-          {errorMessage ? (
-            <p className="rounded-2xl border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-4 py-3 text-sm text-[var(--text-error)]">
-              {errorMessage}
-            </p>
-          ) : null}
-        </div>
-      }
     >
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         {showLoginField ? (
@@ -119,6 +103,18 @@ export function AuthForm({
               {content.alternateLinkLabel}
             </Link>
           </p>
+        </div>
+        <div className="mt-4">
+          {successMessage ? (
+            <p className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
+              {successMessage}
+            </p>
+          ) : null}
+          {errorMessage ? (
+            <p className="rounded-2xl border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-4 py-3 text-sm text-[var(--text-error)]">
+              {errorMessage}
+            </p>
+          ) : null}
         </div>
       </form>
     </FormCard>

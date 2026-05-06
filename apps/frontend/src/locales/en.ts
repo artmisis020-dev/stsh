@@ -73,6 +73,19 @@ export const enMessages: TranslationMessages = {
       passwordMinLengthMessage: "Password must be at least 8 characters.",
     },
   },
+  errors: {
+    authInvalidCredentials: "Incorrect email or password.",
+    authUserNotApproved: "Your account is pending admin approval.",
+    authUserEmailExists: "An account with this email already exists.",
+    authUserLoginExists: "This login name is already taken.",
+    clientDuplicateKits: "Duplicate Terminal KITs in a single request are not allowed.",
+    clientActiveAction: "This Terminal KIT already has an action in progress.",
+    clientOnlyActivationAllowed: "Only activation is allowed for a new Terminal KIT.",
+    clientAlreadyActive: "This Terminal KIT is already active.",
+    clientPermDeactivated: "A permanently deactivated Terminal KIT cannot be activated.",
+    clientNotActive: "Only active Terminal KITs can be deactivated.",
+    unexpected: "An unexpected error occurred.",
+  },
   client: {
     terminalsPage: {
       title: "My terminals",

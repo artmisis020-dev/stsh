@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { LoginDto, RegisterDto } from "@starshield/shared";
 import { AppShell } from "../layout/AppShell.js";
 import { AuthForm } from "./AuthForm.js";
 import type { AuthFormValues } from "../../types/forms.js";
@@ -24,10 +23,7 @@ type AuthPageProps = {
   isPending: boolean;
   errorMessage?: string;
   showLoginField?: boolean;
-  submitAuthForm: (
-    values: LoginDto | RegisterDto,
-    options: AuthMutationOptions,
-  ) => void;
+  submitAuthForm: (values: AuthFormValues, options: AuthMutationOptions) => void;
 };
 
 export function AuthPage({ content, isPending, errorMessage, showLoginField, submitAuthForm }: AuthPageProps) {

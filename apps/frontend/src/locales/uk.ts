@@ -73,6 +73,19 @@ export const ukMessages = {
       passwordMinLengthMessage: "Пароль має містити щонайменше 8 символів.",
     },
   },
+  errors: {
+    authInvalidCredentials: "Неправильний email або пароль.",
+    authUserNotApproved: "Ваш акаунт очікує погодження адміністратора.",
+    authUserEmailExists: "Акаунт із таким email вже існує.",
+    authUserLoginExists: "Цей логін вже зайнятий.",
+    clientDuplicateKits: "Дублікати Термінал KIT в одному запиті не дозволені.",
+    clientActiveAction: "Цей Термінал KIT вже має активну дію в процесі.",
+    clientOnlyActivationAllowed: "Для нового Термінал KIT дозволена лише активація.",
+    clientAlreadyActive: "Цей Термінал KIT вже активний.",
+    clientPermDeactivated: "Постійно деактивований Термінал KIT не можна активувати.",
+    clientNotActive: "Деактивувати можна лише активні Термінал KIT.",
+    unexpected: "Сталася непередбачена помилка.",
+  },
   client: {
     terminalsPage: {
       title: "Мої термінали",

@@ -73,6 +73,19 @@ export type TranslationMessages = {
       passwordMinLengthMessage: string;
     };
   };
+  errors: {
+    authInvalidCredentials: string;
+    authUserNotApproved: string;
+    authUserEmailExists: string;
+    authUserLoginExists: string;
+    clientDuplicateKits: string;
+    clientActiveAction: string;
+    clientOnlyActivationAllowed: string;
+    clientAlreadyActive: string;
+    clientPermDeactivated: string;
+    clientNotActive: string;
+    unexpected: string;
+  };
   client: {
     terminalsPage: {
       title: string;
