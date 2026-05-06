@@ -35,3 +35,18 @@ export enum UserStatus {
   Approved = "approved",
   Rejected = "rejected",
 }
+
+export enum ErrorCode {
+  // Auth
+  InvalidCredentials = "AUTH_INVALID_CREDENTIALS",
+  UserNotApproved = "AUTH_USER_NOT_APPROVED",
+  UserEmailAlreadyExists = "AUTH_USER_EMAIL_EXISTS",
+  UserLoginAlreadyExists = "AUTH_USER_LOGIN_EXISTS",
+  // Client requests
+  DuplicateTerminalKits = "CLIENT_REQUEST_DUPLICATE_KITS",
+  ActiveActionInProgress = "CLIENT_REQUEST_ACTIVE_ACTION",
+  OnlyActivationAllowed = "CLIENT_REQUEST_ONLY_ACTIVATION_ALLOWED",
+  AlreadyActive = "CLIENT_REQUEST_ALREADY_ACTIVE",
+  PermDeactivatedCannotActivate = "CLIENT_REQUEST_PERM_DEACTIVATED",
+  OnlyActiveCanBeDeactivated = "CLIENT_REQUEST_NOT_ACTIVE",
+}

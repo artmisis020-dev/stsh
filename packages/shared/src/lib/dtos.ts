@@ -68,6 +68,7 @@ export type TerminalKitActionDto = {
 export type ClientRequestDto = {
   id: string;
   userId: string;
+  userLogin: string;
   comment: string;
   createdAt: string;
   updatedAt: string;
@@ -83,7 +84,7 @@ export type CreateProviderRequestDto = {
 export type ProviderRequestResultItemDto = {
   actionId: string;
   success: boolean;
-  resultingState: TerminalKitState;
+  resultingState?: TerminalKitState;
 };
 
 export type SubmitProviderResultsDto = {
