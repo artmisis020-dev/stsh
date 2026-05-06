@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
-import { IdActionsController } from "./id-actions.controller";
-import { IdActionsService } from "./id-actions.service";
+import { TerminalKitActionsController } from "./id-actions.controller";
+import { TerminalKitActionsService } from "./id-actions.service";
 
 @Module({
-  controllers: [IdActionsController],
-  providers: [IdActionsService],
-  exports: [IdActionsService],
+  controllers: [TerminalKitActionsController],
+  providers: [TerminalKitActionsService],
+  exports: [TerminalKitActionsService],
 })
-export class IdActionsModule {}
+export class TerminalKitActionsModule {}
