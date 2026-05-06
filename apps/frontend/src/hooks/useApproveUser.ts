@@ -13,5 +13,8 @@ export function useApproveUser() {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.terminalKitCapacity }),
       ]);
     },
+    onError: (error) => {
+      console.error("Failed to approve user:", error);
+    },
   });
 }

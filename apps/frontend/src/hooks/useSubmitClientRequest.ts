@@ -5,5 +5,8 @@ import { clientRequestsService } from "../services/api/client-requests.service.j
 export function useSubmitClientRequest() {
   return useMutation({
     mutationFn: (payload: SubmitClientRequestDto) => clientRequestsService.create(payload),
+    onError: (error) => {
+      console.error("Failed to submit client request:", error);
+    },
   });
 }

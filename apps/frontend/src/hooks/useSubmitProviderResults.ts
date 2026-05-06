@@ -23,5 +23,8 @@ export function useSubmitProviderResults() {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.terminalKitCapacity }),
       ]);
     },
+    onError: (error) => {
+      console.error("Failed to submit provider results:", error);
+    },
   });
 }

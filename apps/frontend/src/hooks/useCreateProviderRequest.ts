@@ -16,5 +16,8 @@ export function useCreateProviderRequest() {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.terminalKitActionHistory }),
       ]);
     },
+    onError: (error) => {
+      console.error("Failed to create provider request:", error);
+    },
   });
 }

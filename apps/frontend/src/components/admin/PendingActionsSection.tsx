@@ -89,18 +89,12 @@ export function PendingActionsSection({
         },
       },
       {
-        accessorKey: "userId",
+        accessorKey: "userLogin",
         header: messages.ui.userLabel,
         cell: ({ row }) => {
-          const value = row.original.userId;
+          const value = row.original.userLogin;
           return (
-            <div className="flex items-center gap-2">
-              <span className="break-all">{value}</span>
-              <CopyButton
-                label={copiedValue === value ? messages.ui.copiedLabel : messages.ui.copyLabel}
-                onClick={() => copyToClipboard(value)}
-              />
-            </div>
+            <span className="font-medium text-[var(--accent-gold)]">{value}</span>
           );
         },
       },

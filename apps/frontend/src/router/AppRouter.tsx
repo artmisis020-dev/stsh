@@ -9,6 +9,8 @@ import { LoginPage } from "../pages/LoginPage.js";
 import { RegisterPage } from "../pages/RegisterPage.js";
 import { AdminTerminalsPage } from "../pages/AdminTerminalsPage.js";
 import { AdminUsersPage } from "../pages/AdminUsersPage.js";
+import { MyTerminalsPage } from "../pages/MyTerminalsPage.js";
+import { MyClientRequestsPage } from "../pages/MyClientRequestsPage.js";
 import { ProtectedRoute } from "./ProtectedRoute.js";
 import { GuestRoute } from "./GuestRoute.js";
 
@@ -17,7 +19,9 @@ export function AppRouter() {
     <Routes>
       <Route path={APP_ROUTES.login} element={<GuestRoute><LoginPage /></GuestRoute>} />
       <Route path={APP_ROUTES.register} element={<GuestRoute><RegisterPage /></GuestRoute>} />
-      <Route path={APP_ROUTES.terminalKits} element={<ProtectedRoute><IdsFormPage /></ProtectedRoute>} />
+      <Route path={APP_ROUTES.terminalKits} element={<ProtectedRoute requiredRole={UserRole.Client}><IdsFormPage /></ProtectedRoute>} />
+      <Route path={APP_ROUTES.myTerminals} element={<ProtectedRoute requiredRole={UserRole.Client}><MyTerminalsPage /></ProtectedRoute>} />
+      <Route path={APP_ROUTES.myRequests} element={<ProtectedRoute requiredRole={UserRole.Client}><MyClientRequestsPage /></ProtectedRoute>} />
       <Route path={APP_ROUTES.admin} element={<ProtectedRoute requiredRole={UserRole.Admin}><AdminLayout /></ProtectedRoute>}>
         <Route index element={<AdminPage />} />
         <Route path="history" element={<AdminHistoryPage />} />

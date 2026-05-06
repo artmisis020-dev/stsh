@@ -15,7 +15,7 @@ export const ukMessages = {
     apiHealth: "Стан API:",
     statusLabel: "Статус",
     roleLabel: "Роль",
-    userLabel: "ID користувача",
+    userLabel: "Користувач",
     actionIdLabel: "ID дії",
     terminalKitIdLabel: "ID Термінал KIT",
     terminalKitLabel: "Термінал KIT",
@@ -30,7 +30,9 @@ export const ukMessages = {
   navigation: {
     login: "Вхід",
     register: "Реєстрація",
-    terminalKits: "Термінал KIT",
+    terminalKits: "Новий запит",
+    myTerminals: "Мої термінали",
+    myRequests: "Мої запити",
     admin: "Адмін",
     logout: "Вийти",
   },
@@ -62,10 +64,30 @@ export const ukMessages = {
       emailLabel: "Email",
       emailPlaceholder: "client@example.com",
       emailRequiredMessage: "Email є обов'язковим.",
+      loginLabel: "Логін",
+      loginPlaceholder: "Ваш унікальний логін",
+      loginRequiredMessage: "Логін є обов'язковим.",
       passwordLabel: "Пароль",
       passwordPlaceholder: "Мінімум 8 символів",
       passwordRequiredMessage: "Пароль є обов'язковим.",
       passwordMinLengthMessage: "Пароль має містити щонайменше 8 символів.",
+    },
+  },
+  client: {
+    terminalsPage: {
+      title: "Мої термінали",
+      description: "Всі Термінал KIT, для яких ви подавали запити, з поточним станом та датами.",
+      emptyTerminals: "Ви ще не подавали жодних запитів на Термінал KIT.",
+    },
+    requestsPage: {
+      title: "Мої запити",
+      description: "Всі клієнтські запити, які ви подавали, з поточним статусом та датами.",
+      emptyRequests: "Ви ще не подавали жодних запитів.",
+      statusCompleted: "Виконано",
+      statusFailed: "Невдало",
+      statusWithProvider: "У провайдера",
+      statusPending: "Очікує розгляду",
+      actionsCountLabel: "Дій",
     },
   },
   clientRequest: {
@@ -192,6 +214,14 @@ export const ukMessages = {
       deactivatedTemp: "Тимчасово деактивований",
       deactivatedPerm: "Постійно деактивований",
     },
-
+    userRoles: {
+      admin: "Адмін",
+      user: "Користувач",
+    },
+    providerRequestStatuses: {
+      approved: "Схвалено",
+      pending: "Очікує",
+      rejected: "Відхилено",
+    },
   },
 } as const;

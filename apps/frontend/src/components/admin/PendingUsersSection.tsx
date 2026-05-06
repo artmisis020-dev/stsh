@@ -36,7 +36,8 @@ export function PendingUsersSection({
               className="flex flex-col gap-4 rounded-2xl border border-[var(--border-main)] bg-black/35 p-4 lg:flex-row lg:items-center lg:justify-between"
             >
               <div>
-                <p className="font-medium text-[var(--text-main)]">{user.email}</p>
+                <p className="font-semibold text-[var(--accent-gold)]">{user.login}</p>
+                <p className="mt-0.5 text-sm text-[var(--text-main)]">{user.email}</p>
                 <p className="mt-1 text-sm text-[var(--text-muted)]">
                   {messages.ui.statusLabel}: {user.status} • {messages.ui.roleLabel}: {user.role}
                 </p>

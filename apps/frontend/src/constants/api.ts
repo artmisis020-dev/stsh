@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
   terminalKits: {
     base: "/terminal-kits",
     capacity: "/terminal-kits/capacity",
+    byUser: "/terminal-kits/by-user",
   },
   terminalKitActions: {
     pendingAdmin: "/terminal-kit-actions/pending-admin",

@@ -34,6 +34,8 @@ export type TranslationMessages = {
     login: string;
     register: string;
     terminalKits: string;
+    myTerminals: string;
+    myRequests: string;
     admin: string;
     logout: string;
   };
@@ -62,10 +64,30 @@ export type TranslationMessages = {
       emailLabel: string;
       emailPlaceholder: string;
       emailRequiredMessage: string;
+      loginLabel: string;
+      loginPlaceholder: string;
+      loginRequiredMessage: string;
       passwordLabel: string;
       passwordPlaceholder: string;
       passwordRequiredMessage: string;
       passwordMinLengthMessage: string;
+    };
+  };
+  client: {
+    terminalsPage: {
+      title: string;
+      description: string;
+      emptyTerminals: string;
+    };
+    requestsPage: {
+      title: string;
+      description: string;
+      emptyRequests: string;
+      statusCompleted: string;
+      statusFailed: string;
+      statusWithProvider: string;
+      statusPending: string;
+      actionsCountLabel: string;
     };
   };
   clientRequest: {

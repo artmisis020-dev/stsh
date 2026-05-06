@@ -47,27 +47,36 @@ export function Navigation() {
   const links =
     user?.role === UserRole.Admin
       ? [{ label: messages.navigation.admin, href: APP_ROUTES.admin }]
-      : [{ label: messages.navigation.terminalKits, href: APP_ROUTES.terminalKits }];
+      : [
+          { label: messages.navigation.terminalKits, href: APP_ROUTES.terminalKits },
+          { label: messages.navigation.myTerminals, href: APP_ROUTES.myTerminals },
+          { label: messages.navigation.myRequests, href: APP_ROUTES.myRequests },
+        ];
 
   return (
-    <nav className="flex flex-wrap gap-3">
-      {links.map((link) => (
-        <NavLink
-          key={link.href}
-          to={link.href}
-          className={({ isActive }) =>
-            `${baseLinkClassName} ${isActive ? activeLinkClassName : inactiveLinkClassName}`
-          }
+    <div className="flex flex-wrap items-center gap-3">
+      {user ? (
+        <span className="text-sm font-medium text-[var(--accent-gold)]">{user.login}</span>
+      ) : null}
+      <nav className="flex flex-wrap gap-3">
+        {links.map((link) => (
+          <NavLink
+            key={link.href}
+            to={link.href}
+            className={({ isActive }) =>
+              `${baseLinkClassName} ${isActive ? activeLinkClassName : inactiveLinkClassName}`
+            }
+          >
+            {link.label}
+          </NavLink>
+        ))}
+        <button
+          onClick={handleLogout}
+          className={`${baseLinkClassName} ${inactiveLinkClassName}`}
         >
-          {link.label}
-        </NavLink>
-      ))}
-      <button
-        onClick={handleLogout}
-        className={`${baseLinkClassName} ${inactiveLinkClassName}`}
-      >
-        {messages.navigation.logout}
-      </button>
-    </nav>
+          {messages.navigation.logout}
+        </button>
+      </nav>
+    </div>
   );
 }

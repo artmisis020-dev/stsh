@@ -2,6 +2,8 @@ export const APP_ROUTES = {
   login: "/login",
   register: "/register",
   terminalKits: "/terminal-kits",
+  myTerminals: "/client/terminals",
+  myRequests: "/client/requests",
   admin: "/admin",
   adminHistory: "/admin/history",
   adminListOfUsers: "/admin/users",

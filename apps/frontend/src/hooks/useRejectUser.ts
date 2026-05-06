@@ -9,5 +9,8 @@ export function useRejectUser() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["pending-users"] });
     },
+    onError: (error) => {
+      console.error("Failed to reject user:", error);
+    },
   });
 }
