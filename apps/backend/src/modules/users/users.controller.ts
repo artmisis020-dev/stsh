@@ -1,8 +1,13 @@
-import { Controller, Get, Param, Patch } from "@nestjs/common";
+import { Controller, Get, Param, Patch, UseGuards } from "@nestjs/common";
+import { UserRole, UserStatus } from "@starshield/shared";
+import { Roles } from "../../decorators/roles.decorator";
+import { JwtAuthGuard } from "../../guards/jwt-auth.guard";
+import { RolesGuard } from "../../guards/roles.guard";
 import { UsersService } from "./users.service";
-import { UserStatus } from "@starshield/shared";
 
 @Controller("users")
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
