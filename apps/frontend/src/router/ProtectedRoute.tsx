@@ -17,7 +17,8 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
   }
 
   if (requiredRole && user?.role !== requiredRole) {
-    return <Navigate replace to={APP_ROUTES.terminalKits} />;
+    const fallback = user?.role === UserRole.Admin ? APP_ROUTES.admin : APP_ROUTES.myTerminals;
+    return <Navigate replace to={fallback} />;
   }
 
   return <>{children}</>;

@@ -23,6 +23,8 @@ type AuthFormProps = {
   isPending: boolean;
   onSubmit: (values: AuthFormValues) => void;
   successMessage?: string;
+  errorMessage?: string;
+  showLoginField?: boolean;
 };
 
 export function AuthForm({
@@ -30,6 +32,8 @@ export function AuthForm({
   isPending,
   onSubmit,
   successMessage,
+  errorMessage,
+  showLoginField,
 }: AuthFormProps) {
   const { messages } = useI18n();
   const formCopy = messages.auth.form;
@@ -55,10 +59,28 @@ export function AuthForm({
               {successMessage}
             </p>
           ) : null}
+          {errorMessage ? (
+            <p className="rounded-2xl border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-4 py-3 text-sm text-[var(--text-error)]">
+              {errorMessage}
+            </p>
+          ) : null}
         </div>
       }
     >
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        {showLoginField ? (
+          <FormField htmlFor="login" label={formCopy.loginLabel} error={errors.login?.message}>
+            <TextInput
+              id="login"
+              type="text"
+              placeholder={formCopy.loginPlaceholder}
+              {...register("login", {
+                required: formCopy.loginRequiredMessage,
+              })}
+            />
+          </FormField>
+        ) : null}
+
         <FormField htmlFor="email" label={formCopy.emailLabel} error={errors.email?.message}>
           <TextInput
             id="email"

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { LoginDto, RegisterDto } from "@starshield/shared";
-import { AppShell } from "../layout/AppShell";
-import { AuthForm } from "./AuthForm";
-import type { AuthFormValues } from "../../types/forms";
+import { AppShell } from "../layout/AppShell.js";
+import { AuthForm } from "./AuthForm.js";
+import type { AuthFormValues } from "../../types/forms.js";
 
 type AuthPageContent = {
   eyebrow: string;
@@ -22,13 +22,15 @@ type AuthMutationOptions = {
 type AuthPageProps = {
   content: AuthPageContent;
   isPending: boolean;
+  errorMessage?: string;
+  showLoginField?: boolean;
   submitAuthForm: (
     values: LoginDto | RegisterDto,
     options: AuthMutationOptions,
   ) => void;
 };
 
-export function AuthPage({ content, isPending, submitAuthForm }: AuthPageProps) {
+export function AuthPage({ content, isPending, errorMessage, showLoginField, submitAuthForm }: AuthPageProps) {
   const [successMessage, setSuccessMessage] = useState<string>();
 
   const handleSubmit = (values: AuthFormValues) => {
@@ -47,6 +49,8 @@ export function AuthPage({ content, isPending, submitAuthForm }: AuthPageProps) 
         isPending={isPending}
         onSubmit={handleSubmit}
         successMessage={successMessage}
+        errorMessage={errorMessage}
+        showLoginField={showLoginField}
       />
     </AppShell>
   );
