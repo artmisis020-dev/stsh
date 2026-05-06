@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.17.1",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
     "backend:dev": "pnpm --filter @starshield/backend dev",
     "frontend:dev": "pnpm --filter @starshield/frontend dev",
