@@ -12,19 +12,19 @@ import { ActionType, type ClientRequestActionInputDto, type SubmitClientRequestD
 class ClientRequestActionDto implements ClientRequestActionInputDto {
   @IsString()
   @IsNotEmpty()
-  idValue!: string;
+  readonly terminalKit!: string;
 
   @IsEnum(ActionType)
-  actionType!: ActionType;
+  readonly actionType!: ActionType;
 }
 
 export class CreateClientRequestDto implements SubmitClientRequestDto {
   @IsString()
-  comment!: string;
+  readonly comment!: string;
 
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => ClientRequestActionDto)
-  actions!: ClientRequestActionDto[];
+  readonly actions!: ClientRequestActionDto[];
 }

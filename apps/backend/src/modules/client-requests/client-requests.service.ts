@@ -1,145 +1,274 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { randomUUID } from "crypto";
+import { Prisma } from "@prisma/client";
 import {
   ActionStatus,
   ActionType,
-  IdState,
+  TerminalKitState,
   type ClientRequestDto,
-  type IdActionDto,
   type SubmitClientRequestDto,
+  type TerminalKitActionDto,
 } from "@starshield/shared";
+import { PrismaService } from "../prisma/prisma.service";
 
 const ACTIVE_ACTION_STATUSES = [ActionStatus.PendingAdmin, ActionStatus.PendingProvider];
 
-type IdSnapshot = {
+type TerminalKitRecord = {
   id: string;
-  value: string;
-  currentState: IdState;
+  terminalKit: string;
+  currentState: TerminalKitState;
 };
+
+function toActionDto(action: {
+  id: string;
+  terminalKitId: string;
+  terminalKit?: { terminalKit: string } | null;
+  actionType: string;
+  status: string;
+  previousState: string | null;
+  resultingState: string | null;
+  clientRequestId: string;
+  providerRequestId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}): TerminalKitActionDto {
+  return {
+    id: action.id,
+    terminalKitId: action.terminalKitId,
+    terminalKit: action.terminalKit?.terminalKit ?? action.terminalKitId,
+    actionType: action.actionType as ActionType,
+    status: action.status as ActionStatus,
+    previousState: action.previousState as TerminalKitState | null,
+    resultingState: action.resultingState as TerminalKitState | null,
+    clientRequestId: action.clientRequestId,
+    providerRequestId: action.providerRequestId,
+    createdAt: action.createdAt.toISOString(),
+    updatedAt: action.updatedAt.toISOString(),
+  };
+}
+
+function toClientRequestDto(request: {
+  id: string;
+  userId: string;
+  comment: string;
+  createdAt: Date;
+  updatedAt: Date;
+  terminalKitActions: Array<{
+    id: string;
+    terminalKitId: string;
+    terminalKit?: { terminalKit: string } | null;
+    actionType: string;
+    status: string;
+    previousState: string | null;
+    resultingState: string | null;
+    clientRequestId: string;
+    providerRequestId: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }>;
+}): ClientRequestDto {
+  return {
+    id: request.id,
+    userId: request.userId,
+    comment: request.comment,
+    createdAt: request.createdAt.toISOString(),
+    updatedAt: request.updatedAt.toISOString(),
+    actions: request.terminalKitActions.map(toActionDto),
+  };
+}
 
 @Injectable()
 export class ClientRequestsService {
-  private readonly ids = new Map<string, IdSnapshot>([
-    [
-      "ID-100",
-      {
-        id: randomUUID(),
-        value: "ID-100",
-        currentState: IdState.Active,
-      },
-    ],
-    [
-      "ID-200",
-      {
-        id: randomUUID(),
-        value: "ID-200",
-        currentState: IdState.DeactivatedTemp,
-      },
-    ],
-    [
-      "ID-300",
-      {
-        id: randomUUID(),
-        value: "ID-300",
-        currentState: IdState.DeactivatedPerm,
-      },
-    ],
-  ]);
+  constructor(private readonly prisma: PrismaService) { }
 
-  private readonly requests: ClientRequestDto[] = [];
+  async create(userId: string, payload: SubmitClientRequestDto): Promise<ClientRequestDto> {
+    this.ensureNoDuplicateTerminalKits(payload);
 
-  create(payload: SubmitClientRequestDto) {
-    this.ensureNoDuplicateIds(payload);
+    const normalizedActions = payload.actions.map((action) => ({
+      terminalKit: action.terminalKit.trim().toUpperCase(),
+      actionType: action.actionType,
+    }));
 
-    const requestId = randomUUID();
-    const createdAt = new Date().toISOString();
-    const actions = payload.actions.map((action) => {
-      const idRecord = this.findOrCreateId(action.idValue);
-      this.ensureActionAllowed(idRecord.currentState, action.actionType);
-      this.ensureNoActiveAction(idRecord.id);
+    const createdRequest = await this.prisma.$transaction(async (tx) => {
+      const terminalKitValues = normalizedActions.map((action) => action.terminalKit);
+      const existingTerminalKits = await tx.terminalKit.findMany({
+        where: { terminalKit: { in: terminalKitValues } },
+      });
 
-      const idAction: IdActionDto = {
-        id: randomUUID(),
-        idId: idRecord.id,
-        actionType: action.actionType,
-        status: ActionStatus.PendingAdmin,
-        clientRequestId: requestId,
-        providerRequestId: null,
-        createdAt,
-      };
+      const terminalKitByValue = new Map(
+        existingTerminalKits.map((item) => [
+          item.terminalKit,
+          {
+            id: item.id,
+            terminalKit: item.terminalKit,
+            currentState: item.currentState as TerminalKitState,
+          } satisfies TerminalKitRecord,
+        ]),
+      );
 
-      return idAction;
+      for (const action of normalizedActions) {
+        const terminalKitRecord =
+          terminalKitByValue.get(action.terminalKit) ??
+          (await this.createPendingTerminalKit(tx, action.terminalKit));
+
+        terminalKitByValue.set(action.terminalKit, terminalKitRecord);
+
+        this.ensureActionAllowed(terminalKitRecord.currentState, action.actionType);
+        await this.ensureNoActiveAction(tx, terminalKitRecord.terminalKit);
+      }
+
+      return tx.clientRequest.create({
+        data: {
+          userId,
+          comment: payload.comment,
+          terminalKitActions: {
+            create: normalizedActions.map((action) => {
+              const terminalKitRecord = terminalKitByValue.get(action.terminalKit)!;
+
+              return {
+                terminalKitId: terminalKitRecord.terminalKit,
+                actionType: action.actionType,
+                status: ActionStatus.PendingAdmin,
+                previousState: terminalKitRecord.currentState,
+                resultingState: null,
+              };
+            }),
+          },
+        },
+        include: {
+          terminalKitActions: {
+            include: {
+              terminalKit: {
+                select: {
+                  terminalKit: true,
+                },
+              },
+            },
+            orderBy: { createdAt: "asc" },
+          },
+        },
+      });
     });
 
-    const request: ClientRequestDto = {
-      id: requestId,
-      userId: "demo-client",
-      comment: payload.comment,
-      createdAt,
-      actions,
-    };
-
-    this.requests.unshift(request);
-    return request;
+    return toClientRequestDto(createdRequest);
   }
 
-  getMyRequests() {
-    return this.requests;
+  async getMyRequests(userId: string): Promise<ClientRequestDto[]> {
+    const requests = await this.prisma.clientRequest.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        terminalKitActions: {
+          include: {
+            terminalKit: {
+              select: {
+                terminalKit: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "asc" },
+        },
+      },
+    });
+
+    return requests.map(toClientRequestDto);
   }
 
-  private ensureNoDuplicateIds(payload: SubmitClientRequestDto) {
-    const uniqueIds = new Set(payload.actions.map((action) => action.idValue.trim().toLowerCase()));
-
-    if (uniqueIds.size !== payload.actions.length) {
-      throw new BadRequestException("Duplicate IDs in a single request are not allowed.");
-    }
-  }
-
-  private ensureNoActiveAction(idId: string) {
-    const hasActiveAction = this.requests.some((request) =>
-      request.actions.some(
-        (action) =>
-          action.idId === idId && ACTIVE_ACTION_STATUSES.includes(action.status),
-      ),
+  private ensureNoDuplicateTerminalKits(payload: SubmitClientRequestDto) {
+    const uniqueTerminalKits = new Set(
+      payload.actions.map((action) => action.terminalKit.trim().toLowerCase()),
     );
 
-    if (hasActiveAction) {
-      throw new BadRequestException("ID already has an active action in progress.");
+    if (uniqueTerminalKits.size !== payload.actions.length) {
+      throw new BadRequestException(
+        "Duplicate terminal kits in a single request are not allowed.",
+      );
     }
   }
 
-  private ensureActionAllowed(currentState: IdState, actionType: ActionType) {
-    if (currentState === IdState.Active && actionType === ActionType.Activate) {
-      throw new BadRequestException("Active ID cannot be activated again.");
+  private async ensureNoActiveAction(
+    tx: Prisma.TransactionClient,
+    terminalKitId: string,
+  ): Promise<void> {
+    const activeAction = await tx.terminalKitAction.findFirst({
+      where: {
+        terminalKitId,
+        status: { in: ACTIVE_ACTION_STATUSES },
+      },
+    });
+
+    if (activeAction) {
+      throw new BadRequestException(
+        "Terminal kit already has an active action in progress.",
+      );
+    }
+  }
+
+  private ensureActionAllowed(
+    currentState: TerminalKitState,
+    actionType: ActionType,
+  ) {
+    if (currentState === TerminalKitState.Initiated && actionType !== ActionType.Activate) {
+      throw new BadRequestException(
+        "Only activation is allowed for an initiated terminal kit.",
+      );
     }
 
-    if (currentState === IdState.DeactivatedPerm && actionType === ActionType.Activate) {
-      throw new BadRequestException("Permanently deactivated ID cannot be activated.");
+    if (currentState === TerminalKitState.Active && actionType === ActionType.Activate) {
+      throw new BadRequestException("Active terminal kit cannot be activated again.");
     }
 
     if (
-      currentState !== IdState.Active &&
+      currentState === TerminalKitState.DeactivatedPerm &&
+      actionType === ActionType.Activate
+    ) {
+      throw new BadRequestException(
+        "Permanently deactivated terminal kit cannot be activated.",
+      );
+    }
+
+    if (
+      currentState !== TerminalKitState.Active &&
       [ActionType.DeactivatePerm, ActionType.DeactivateTemp].includes(actionType)
     ) {
-      throw new BadRequestException("Only active IDs can be deactivated.");
+      throw new BadRequestException("Only active terminal kits can be deactivated.");
     }
   }
 
-  private findOrCreateId(value: string) {
-    const trimmedValue = value.trim();
-    const existingId = this.ids.get(trimmedValue);
+  private async createPendingTerminalKit(
+    tx: Prisma.TransactionClient,
+    terminalKit: string,
+  ): Promise<TerminalKitRecord> {
+    const created = await tx.terminalKit.create({
+      data: {
+        terminalKit,
+        currentState: TerminalKitState.Initiated,
+      },
+    });
 
-    if (existingId) {
-      return existingId;
-    }
-
-    const newId: IdSnapshot = {
-      id: randomUUID(),
-      value: trimmedValue,
-      currentState: IdState.Active,
+    return {
+      id: created.id,
+      terminalKit: created.terminalKit,
+      currentState: created.currentState as TerminalKitState,
     };
+  }
 
-    this.ids.set(trimmedValue, newId);
-    return newId;
+  public async getAllRequests(): Promise<ClientRequestDto[]> {
+    const requests = await this.prisma.clientRequest.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        terminalKitActions: {
+          include: {
+            terminalKit: {
+              select: {
+                terminalKit: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "asc" },
+        },
+      },
+    });
+
+    return requests.map(toClientRequestDto);
   }
 }
