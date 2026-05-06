@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compare, hash } from "bcryptjs";
-import { UserRole, UserStatus, type AuthResponseDto, type LoginDto, type RegisterDto, type UserDto } from "@starshield/shared";
+import { ErrorCode, UserRole, UserStatus, type AuthResponseDto, type LoginDto, type RegisterDto, type UserDto } from "@starshield/shared";
 import { PrismaService } from "../prisma/prisma.service";
 
 function toUserDto(user: {
@@ -36,21 +36,29 @@ export class AuthService {
   ) {}
 
   async register(payload: RegisterDto): Promise<UserDto> {
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email: payload.email.toLowerCase().trim() },
-    });
+    const normalizedEmail = payload.email.toLowerCase().trim();
+    const normalizedLogin = payload.login.toLowerCase().trim();
 
-    if (existingUser) {
-      throw new ConflictException("User with this email already exists.");
+    const [existingEmail, existingLogin] = await Promise.all([
+      this.prisma.user.findUnique({ where: { email: normalizedEmail } }),
+      this.prisma.user.findUnique({ where: { login: normalizedLogin } }),
+    ]);
+
+    if (existingEmail) {
+      throw new ConflictException({ code: ErrorCode.UserEmailAlreadyExists, message: "User with this email already exists." });
+    }
+
+    if (existingLogin) {
+      throw new ConflictException({ code: ErrorCode.UserLoginAlreadyExists, message: "User with this login already exists." });
     }
 
     const user = await this.prisma.user.create({
       data: {
-        email: payload.email.toLowerCase().trim(),
+        email: normalizedEmail,
         passwordHash: await hash(payload.password, 10),
         role: UserRole.Client,
         status: UserStatus.Pending,
-        login: payload.login.toLowerCase().trim(),
+        login: normalizedLogin,
       },
     });
 
@@ -63,17 +71,17 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException("Invalid credentials.");
+      throw new UnauthorizedException({ code: ErrorCode.InvalidCredentials, message: "Invalid credentials." });
     }
 
     const isValidPassword = await compare(payload.password, user.passwordHash);
 
     if (!isValidPassword) {
-      throw new UnauthorizedException("Invalid credentials.");
+      throw new UnauthorizedException({ code: ErrorCode.InvalidCredentials, message: "Invalid credentials." });
     }
 
     if (user.status !== UserStatus.Approved) {
-      throw new UnauthorizedException("User is not approved yet.");
+      throw new UnauthorizedException({ code: ErrorCode.UserNotApproved, message: "User is not approved yet." });
     }
 
     const accessToken = await this.jwtService.signAsync({

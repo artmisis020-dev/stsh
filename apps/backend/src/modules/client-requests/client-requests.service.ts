@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import {
   ActionStatus,
   ActionType,
+  ErrorCode,
   TerminalKitState,
   type ClientRequestDto,
   type SubmitClientRequestDto,
@@ -52,6 +53,7 @@ function toClientRequestDto(request: {
   comment: string;
   createdAt: Date;
   updatedAt: Date;
+  user?: { login: string } | null;
   terminalKitActions: Array<{
     id: string;
     terminalKitId: string;
@@ -69,6 +71,7 @@ function toClientRequestDto(request: {
   return {
     id: request.id,
     userId: request.userId,
+    userLogin: request.user?.login ?? "",
     comment: request.comment,
     createdAt: request.createdAt.toISOString(),
     updatedAt: request.updatedAt.toISOString(),
@@ -135,6 +138,7 @@ export class ClientRequestsService {
           },
         },
         include: {
+          user: { select: { login: true } },
           terminalKitActions: {
             include: {
               terminalKit: {
@@ -157,6 +161,7 @@ export class ClientRequestsService {
       where: { userId },
       orderBy: { createdAt: "desc" },
       include: {
+        user: { select: { login: true } },
         terminalKitActions: {
           include: {
             terminalKit: {
@@ -179,9 +184,7 @@ export class ClientRequestsService {
     );
 
     if (uniqueTerminalKits.size !== payload.actions.length) {
-      throw new BadRequestException(
-        "Duplicate terminal kits in a single request are not allowed.",
-      );
+      throw new BadRequestException({ code: ErrorCode.DuplicateTerminalKits, message: "Duplicate terminal kits in a single request are not allowed." });
     }
   }
 
@@ -197,9 +200,7 @@ export class ClientRequestsService {
     });
 
     if (activeAction) {
-      throw new BadRequestException(
-        "Terminal kit already has an active action in progress.",
-      );
+      throw new BadRequestException({ code: ErrorCode.ActiveActionInProgress, message: "Terminal kit already has an active action in progress." });
     }
   }
 
@@ -208,29 +209,25 @@ export class ClientRequestsService {
     actionType: ActionType,
   ) {
     if (currentState === TerminalKitState.Initiated && actionType !== ActionType.Activate) {
-      throw new BadRequestException(
-        "Only activation is allowed for an initiated terminal kit.",
-      );
+      throw new BadRequestException({ code: ErrorCode.OnlyActivationAllowed, message: "Only activation is allowed for an initiated terminal kit." });
     }
 
     if (currentState === TerminalKitState.Active && actionType === ActionType.Activate) {
-      throw new BadRequestException("Active terminal kit cannot be activated again.");
+      throw new BadRequestException({ code: ErrorCode.AlreadyActive, message: "Active terminal kit cannot be activated again." });
     }
 
     if (
       currentState === TerminalKitState.DeactivatedPerm &&
       actionType === ActionType.Activate
     ) {
-      throw new BadRequestException(
-        "Permanently deactivated terminal kit cannot be activated.",
-      );
+      throw new BadRequestException({ code: ErrorCode.PermDeactivatedCannotActivate, message: "Permanently deactivated terminal kit cannot be activated." });
     }
 
     if (
       currentState !== TerminalKitState.Active &&
       [ActionType.DeactivatePerm, ActionType.DeactivateTemp].includes(actionType)
     ) {
-      throw new BadRequestException("Only active terminal kits can be deactivated.");
+      throw new BadRequestException({ code: ErrorCode.OnlyActiveCanBeDeactivated, message: "Only active terminal kits can be deactivated." });
     }
   }
 
@@ -256,6 +253,7 @@ export class ClientRequestsService {
     const requests = await this.prisma.clientRequest.findMany({
       orderBy: { createdAt: "desc" },
       include: {
+        user: { select: { login: true } },
         terminalKitActions: {
           include: {
             terminalKit: {
