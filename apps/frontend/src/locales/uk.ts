@@ -137,6 +137,7 @@ export const ukMessages = {
       terminalKitRequiredMessage: "Термінал KIT є обов'язковим.",
       terminalKitFormatMessage:
         "Введіть коректний Термінал KIT, додавши цифри після KIT, наприклад KIT00000000.",
+      successMessage: "Запит успішно надіслано.",
     },
   },
   admin: {

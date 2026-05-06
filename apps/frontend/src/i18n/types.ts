@@ -132,6 +132,7 @@ export type TranslationMessages = {
       actionTypeLabel: string;
       terminalKitRequiredMessage: string;
       terminalKitFormatMessage: string;
+      successMessage: string;
     };
   };
   admin: {

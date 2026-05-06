@@ -137,6 +137,7 @@ export const enMessages: TranslationMessages = {
       terminalKitRequiredMessage: "Terminal KIT is required.",
       terminalKitFormatMessage:
         "Enter a valid Terminal KIT by adding numbers after KIT, for example KIT00000000.",
+      successMessage: "Request submitted successfully.",
     },
   },
   admin: {

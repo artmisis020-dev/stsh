@@ -18,6 +18,7 @@ import { TextInput } from "../ui/TextInput.js";
 type ClientRequestFormProps = {
   healthStatusLabel: string;
   isSubmitting: boolean;
+  errorMessage?: string;
   onSubmit: (values: SubmitClientRequestDto) => void;
 };
 
@@ -26,6 +27,7 @@ type RequestMode = "activation" | "deactivation";
 export function ClientRequestForm({
   healthStatusLabel,
   isSubmitting,
+  errorMessage,
   onSubmit,
 }: ClientRequestFormProps) {
   const { messages } = useI18n();
@@ -247,8 +249,13 @@ export function ClientRequestForm({
             </button>
           </section>
 
-          <div>
+          <div className="space-y-4">
             <SubmitButton isPending={isSubmitting}>{pageCopy.submitLabel}</SubmitButton>
+            {errorMessage ? (
+              <p className="rounded-2xl border border-[var(--accent-red)]/40 bg-[var(--accent-red)]/10 px-4 py-3 text-sm text-[var(--text-error)]">
+                {errorMessage}
+              </p>
+            ) : null}
           </div>
         </form>
       )}
