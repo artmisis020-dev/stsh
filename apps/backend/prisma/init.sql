@@ -10,8 +10,8 @@ BEGIN
     CREATE TYPE user_status AS ENUM ('pending', 'approved', 'rejected');
   END IF;
 
-  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'id_state') THEN
-    CREATE TYPE id_state AS ENUM ('active', 'deactivated_temp', 'deactivated_perm');
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'terminal_kit_state') THEN
+    CREATE TYPE terminal_kit_state AS ENUM ('active', 'deactivated_temp', 'deactivated_perm');
   END IF;
 
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'action_type') THEN
@@ -33,50 +33,48 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   role user_role NOT NULL,
   status user_status NOT NULL DEFAULT 'pending',
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS client_requests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
   comment TEXT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS ids (
+CREATE TABLE IF NOT EXISTS terminal_kits (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  value TEXT NOT NULL UNIQUE,
-  current_state id_state NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  terminal_kit TEXT NOT NULL UNIQUE,
+  current_state terminal_kit_state,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS provider_requests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   external_id TEXT NOT NULL,
   status provider_request_status NOT NULL DEFAULT 'pending',
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS id_actions (
+CREATE TABLE IF NOT EXISTS terminal_kit_actions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  id_id UUID NOT NULL REFERENCES ids(id),
+  terminal_kit_id UUID NOT NULL REFERENCES terminal_kits(id),
   action_type action_type NOT NULL,
   status action_status NOT NULL DEFAULT 'pending_admin',
+  previous_state terminal_kit_state,
+  resulting_state terminal_kit_state,
   client_request_id UUID NOT NULL REFERENCES client_requests(id),
   provider_request_id UUID REFERENCES provider_requests(id),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE IF NOT EXISTS audit_logs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  id_id UUID NOT NULL REFERENCES ids(id),
-  prev_state id_state NOT NULL,
-  new_state id_state NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS idx_users_status ON users(status);
 CREATE INDEX IF NOT EXISTS idx_client_requests_user_id ON client_requests(user_id);
-CREATE INDEX IF NOT EXISTS idx_id_actions_status ON id_actions(status);
-CREATE INDEX IF NOT EXISTS idx_id_actions_provider_request_id ON id_actions(provider_request_id);
-CREATE INDEX IF NOT EXISTS idx_audit_logs_id_id ON audit_logs(id_id);
+CREATE INDEX IF NOT EXISTS idx_terminal_kit_actions_status ON terminal_kit_actions(status);
+CREATE INDEX IF NOT EXISTS idx_terminal_kit_actions_provider_request_id ON terminal_kit_actions(provider_request_id);

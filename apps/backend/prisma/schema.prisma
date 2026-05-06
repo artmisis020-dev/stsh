@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -18,7 +18,8 @@ enum UserStatus {
   rejected
 }
 
-enum IdState {
+enum TerminalKitState {
+  initiated
   active
   deactivated_temp
   deactivated_perm
@@ -45,74 +46,70 @@ enum ProviderRequestStatus {
 }
 
 model User {
-  id             String          @id @default(uuid()) @db.Uuid
+  id             String          @id @default(uuid())
   email          String          @unique
+  login          String          @unique
   passwordHash   String          @map("password_hash")
   role           UserRole
   status         UserStatus
   createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
   clientRequests ClientRequest[]
 
   @@map("users")
 }
 
+model TerminalKit {
+  id           String           @id @default(uuid())
+  terminalKit  String     @unique @map("terminal_kit")
+  currentState TerminalKitState? @map("current_state")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  actions      TerminalKitAction[]
+
+  @@map("terminal_kits")
+}
 model ClientRequest {
-  id          String     @id @default(uuid()) @db.Uuid
-  userId      String     @map("user_id") @db.Uuid
-  comment     String
-  createdAt   DateTime   @default(now()) @map("created_at")
-  user        User       @relation(fields: [userId], references: [id])
-  idActions   IdAction[]
+  id                 String              @id @default(uuid())
+  userId             String              @map("user_id")
+  comment            String
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  user               User                @relation(fields: [userId], references: [id])
+  terminalKitActions TerminalKitAction[]
 
   @@map("client_requests")
 }
 
-model IdRecord {
-  id           String     @id @default(uuid()) @db.Uuid
-  value        String     @unique
-  currentState IdState    @map("current_state")
-  createdAt    DateTime   @default(now()) @map("created_at")
-  idActions    IdAction[]
-  auditLogs    AuditLog[]
+model TerminalKitAction {
+  id                String            @id @default(uuid())
+  actionType        ActionType        @map("action_type")
+  status            ActionStatus
+  previousState     TerminalKitState? @map("previous_state")
+  resultingState    TerminalKitState? @map("resulting_state")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  // This column stores the unique TerminalKit.terminalKit value, not the internal TerminalKit.id.
+  terminalKitId     String            @map("terminal_kit_id")
+  clientRequestId   String            @map("client_request_id")
+  providerRequestId String?           @map("provider_request_id")
+  terminalKit       TerminalKit       @relation(fields: [terminalKitId], references: [terminalKit])
+  clientRequest     ClientRequest     @relation(fields: [clientRequestId], references: [id])
+  providerRequest   ProviderRequest?  @relation(fields: [providerRequestId], references: [id])
 
-  @@map("ids")
+  @@index([status], map: "idx_terminal_kit_actions_status")
+  @@index([providerRequestId], map: "idx_terminal_kit_actions_provider_request_id")
+  @@map("terminal_kit_actions")
 }
 
 model ProviderRequest {
-  id         String                @id @default(uuid()) @db.Uuid
-  externalId String                @map("external_id")
-  status     ProviderRequestStatus
-  createdAt  DateTime              @default(now()) @map("created_at")
-  idActions  IdAction[]
+  id                 String                @id @default(uuid())
+  externalId         String                @map("external_id")
+  comment            String                @default("")
+  status             ProviderRequestStatus
+  createdAt          DateTime              @default(now()) @map("created_at")
+  updatedAt          DateTime              @updatedAt @map("updated_at")
+  terminalKitActions TerminalKitAction[]
 
   @@map("provider_requests")
-}
-
-model IdAction {
-  id                String          @id @default(uuid()) @db.Uuid
-  idId              String          @map("id_id") @db.Uuid
-  actionType        ActionType      @map("action_type")
-  status            ActionStatus
-  clientRequestId   String          @map("client_request_id") @db.Uuid
-  providerRequestId String?         @map("provider_request_id") @db.Uuid
-  createdAt         DateTime        @default(now()) @map("created_at")
-  idRecord          IdRecord        @relation(fields: [idId], references: [id])
-  clientRequest     ClientRequest   @relation(fields: [clientRequestId], references: [id])
-  providerRequest   ProviderRequest? @relation(fields: [providerRequestId], references: [id])
-
-  @@index([status], map: "idx_id_actions_status")
-  @@index([providerRequestId], map: "idx_id_actions_provider_request_id")
-  @@map("id_actions")
-}
-
-model AuditLog {
-  id        String   @id @default(uuid()) @db.Uuid
-  idId      String   @map("id_id") @db.Uuid
-  prevState IdState  @map("prev_state")
-  newState  IdState  @map("new_state")
-  createdAt DateTime @default(now()) @map("created_at")
-  idRecord  IdRecord @relation(fields: [idId], references: [id])
-
-  @@index([idId], map: "idx_audit_logs_id_id")
-  @@map("audit_logs")
 }
